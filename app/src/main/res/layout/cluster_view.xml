@@ -6,7 +6,7 @@
     tools:parentTag="android.widget.LinearLayout">
 
     <LinearLayout
-        android:id="@+id/layout_green_group"
+        android:id="@+id/layout_cafe_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
@@ -18,7 +18,7 @@
             android:src="@drawable/cafe_ic" />
 
         <TextView
-            android:id="@+id/text_green_pins"
+            android:id="@+id/text_cafe_pins"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -29,7 +29,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/layout_yellow_group"
+        android:id="@+id/layout_landmark_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
@@ -41,7 +41,7 @@
             android:src="@drawable/landmark_icon" />
 
         <TextView
-            android:id="@+id/text_yello_pins"
+            android:id="@+id/text_landmark_pins"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -52,7 +52,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/layout_red_group"
+        android:id="@+id/layout_hotel_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
@@ -64,7 +64,7 @@
             android:src="@drawable/ic_hotel" />
 
         <TextView
-            android:id="@+id/text_red_pins"
+            android:id="@+id/text_hotel_pins"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

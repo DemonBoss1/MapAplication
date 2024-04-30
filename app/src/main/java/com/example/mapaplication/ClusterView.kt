@@ -10,13 +10,13 @@ import com.example.mapaplication.R
 
 class ClusterView(context: Context?) : LinearLayout(context) {
 
-    private val greenText by lazy { findViewById<TextView>(R.id.text_green_pins) }
-    private val yellowText by lazy { findViewById<TextView>(R.id.text_yello_pins) }
-    private val redText by lazy { findViewById<TextView>(R.id.text_red_pins) }
+    private val cafeText by lazy { findViewById<TextView>(R.id.text_cafe_pins) }
+    private val landmarkText by lazy { findViewById<TextView>(R.id.text_landmark_pins) }
+    private val hotelText by lazy { findViewById<TextView>(R.id.text_hotel_pins) }
 
-    private val greenLayout by lazy { findViewById<View>(R.id.layout_green_group) }
-    private val yellowLayout by lazy { findViewById<View>(R.id.layout_yellow_group) }
-    private val redLayout by lazy { findViewById<View>(R.id.layout_red_group) }
+    private val cafeLayout by lazy { findViewById<View>(R.id.layout_cafe_group) }
+    private val landmarkLayout by lazy { findViewById<View>(R.id.layout_landmark_group) }
+    private val hotelLayout by lazy { findViewById<View>(R.id.layout_hotel_group) }
 
     init {
         inflate(context, R.layout.cluster_view, this)
@@ -36,9 +36,9 @@ class ClusterView(context: Context?) : LinearLayout(context) {
         type: PlacemarkType
     ) {
         val (textView, layoutView) = when (type) {
-            PlacemarkType.CAFE -> greenText to greenLayout
-            PlacemarkType.ARCHITECTURE -> yellowText to yellowLayout
-            PlacemarkType.HOTEL -> redText to redLayout
+            PlacemarkType.CAFE -> cafeText to cafeLayout
+            PlacemarkType.ARCHITECTURE -> landmarkText to landmarkLayout
+            PlacemarkType.HOTEL -> hotelText to hotelLayout
         }
         val value = placemarkTypes.countTypes(type)
 
