@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.mapaplication.PlacemarkType
 import com.example.mapaplication.PlacemarkUserData
 import com.example.mapaplication.R
 import com.example.mapaplication.databinding.FragmentHomeBinding
@@ -129,55 +130,38 @@ class HomeFragment : Fragment() {
         )
 
         val collection = map.mapObjects.addCollection()
+
+        // Add a clusterized collection
         clasterizedCollection = collection.addClusterizedPlacemarkCollection(clusterListener)
 
-        val imageProvider = ImageProvider.fromResource(activity, R.drawable.landmark_icon)
+        // Add pins to the clusterized collection
 
-        points.forEach { point ->
+        val placemarkTypeToImageProvider = mapOf(
+            PlacemarkType.CAFE to ImageProvider.fromResource(activity, R.drawable.cafe_ic),
+            PlacemarkType.ARCHITECTURE to ImageProvider.fromResource(activity, R.drawable.landmark_icon),
+            PlacemarkType.HOTEL to ImageProvider.fromResource(activity, R.drawable.ic_hotel),
+        )
+
+        points.forEachIndexed { index, point ->
+            val type = PlacemarkType.values().random()
+            val imageProvider = placemarkTypeToImageProvider[type] ?: return
             clasterizedCollection.addPlacemark().apply {
                 geometry = point
                 setIcon(imageProvider, IconStyle().apply {
                     anchor = PointF(0.5f, 1.0f)
-                    scale = 0.6f
+                    scale = 0.4f
                 })
-                    // If we want to make placemarks draggable, we should call
-                    // clasterizedCollection.clusterPlacemarks on onMapObjectDragEnd
-                    isDraggable = true
-                    setDragListener(pinDragListener)
-                    // Put any data in MapObject
-                    this.addTapListener(placemarkTapListener)
-                }
+                // If we want to make placemarks draggable, we should call
+                // clasterizedCollection.clusterPlacemarks on onMapObjectDragEnd
+                isDraggable = true
+                setDragListener(pinDragListener)
+                // Put any data in MapObject
+                userData = PlacemarkUserData("Data_$index", type)
+                addTapListener(placemarkTapListener)
+            }
         }
 
         clasterizedCollection.clusterPlacemarks(CLUSTER_RADIUS, CLUSTER_MIN_ZOOM)
-
-        // Composite placemark with text
-        val placemark = collection.addPlacemark(Point(56.327306, 43.984995)).apply {
-            addTapListener(singlePlacemarkTapListener)
-            // Set text near the placemark with the custom TextStyle
-
-            setText(
-                "Special place",
-                TextStyle().apply {
-                    size = 10f
-                    placement = TextStyle.Placement.RIGHT
-                    offset = 5f
-                },
-            )
-        }
-
-        placemark.useCompositeIcon().apply {
-            // Combine several icons in the single composite icon
-            setIcon(
-                "point",
-                ImageProvider.fromResource(activity, R.drawable.ic_circle),
-                IconStyle().apply {
-                    anchor = PointF(0.5f, 0.5f)
-                    flat = true
-                    scale = 0.05f
-                }
-            )
-        }
     }
 
     override fun onStart() {

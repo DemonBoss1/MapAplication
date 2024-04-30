@@ -1,9 +1,9 @@
 package com.example.mapaplication
 
 enum class PlacemarkType {
-    YELLOW,
-    GREEN,
-    RED
+    ARCHITECTURE,
+    CAFE,
+    HOTEL
 }
 
 data class PlacemarkUserData(

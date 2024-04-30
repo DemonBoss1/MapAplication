@@ -15,7 +15,7 @@
             android:layout_height="16dp"
             android:layout_gravity="center_vertical"
             android:scaleType="fitXY"
-            android:src="@drawable/landmark_icon" />
+            android:src="@drawable/cafe_ic" />
 
         <TextView
             android:id="@+id/text_green_pins"
@@ -61,7 +61,7 @@
             android:layout_height="16dp"
             android:layout_gravity="center_vertical"
             android:scaleType="fitXY"
-            android:src="@drawable/landmark_icon" />
+            android:src="@drawable/ic_hotel" />
 
         <TextView
             android:id="@+id/text_red_pins"

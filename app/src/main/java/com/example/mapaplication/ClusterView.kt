@@ -36,9 +36,9 @@ class ClusterView(context: Context?) : LinearLayout(context) {
         type: PlacemarkType
     ) {
         val (textView, layoutView) = when (type) {
-            PlacemarkType.GREEN -> greenText to greenLayout
-            PlacemarkType.YELLOW -> yellowText to yellowLayout
-            PlacemarkType.RED -> redText to redLayout
+            PlacemarkType.CAFE -> greenText to greenLayout
+            PlacemarkType.ARCHITECTURE -> yellowText to yellowLayout
+            PlacemarkType.HOTEL -> redText to redLayout
         }
         val value = placemarkTypes.countTypes(type)
 
