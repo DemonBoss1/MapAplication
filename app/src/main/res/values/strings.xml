@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MapAplication</string>
+    <string name="app_name">The secret of cities</string>
     <string name="title_map">Map</string>
     <string name="title_history">History</string>
 </resources>
