@@ -1,4 +1,4 @@
-package com.example.mapaplication.ui.home
+package com.example.mapaplication.ui.map
 
 import android.graphics.PointF
 import android.os.Bundle
@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import com.example.mapaplication.PlacemarkType
 import com.example.mapaplication.PlacemarkUserData
 import com.example.mapaplication.R
-import com.example.mapaplication.databinding.FragmentHomeBinding
+import com.example.mapaplication.databinding.FragmentMapBinding
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.geometry.Point
@@ -22,7 +22,6 @@ import com.yandex.mapkit.map.IconStyle
 import com.yandex.mapkit.map.MapObject
 import com.yandex.mapkit.map.MapObjectDragListener
 import com.yandex.mapkit.map.MapObjectTapListener
-import com.yandex.mapkit.map.TextStyle
 import com.yandex.mapkit.mapview.MapView
 import com.yandex.mapkitdemo.objects.ClusterView
 import com.yandex.runtime.image.ImageProvider
@@ -30,10 +29,10 @@ import com.yandex.runtime.ui_view.ViewProvider
 
 private const val CLUSTER_RADIUS = 60.0
 private const val CLUSTER_MIN_ZOOM = 15
-class HomeFragment : Fragment() {
+class MapFragment : Fragment() {
     private lateinit var mapView: MapView
 
-    private var _binding: FragmentHomeBinding? = null
+    private var _binding: FragmentMapBinding? = null
 
     private lateinit var clasterizedCollection: ClusterizedPlacemarkCollection
 
@@ -93,7 +92,7 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentMapBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         init()
