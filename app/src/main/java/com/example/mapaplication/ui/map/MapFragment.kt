@@ -13,6 +13,8 @@ import com.example.mapaplication.R
 import com.example.mapaplication.databinding.FragmentMapBinding
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKitFactory
+import com.yandex.mapkit.ScreenPoint
+import com.yandex.mapkit.ScreenRect
 import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.map.CameraPosition
 import com.yandex.mapkit.map.ClusterListener
@@ -35,6 +37,8 @@ class MapFragment : Fragment() {
     private var _binding: FragmentMapBinding? = null
 
     private lateinit var clasterizedCollection: ClusterizedPlacemarkCollection
+
+    var isFocusRect = false
 
 
     // This property is only valid between onCreateView and
@@ -62,12 +66,36 @@ class MapFragment : Fragment() {
     private val clusterTapListener = ClusterTapListener {
         true
     }
-    private val placeMarkTapListener = MapObjectTapListener { _, point ->
+    private val placemarkTapListener = MapObjectTapListener { mapObject, point ->
         Toast.makeText(
             activity,
             "Tapped the point (${point.longitude}, ${point.latitude})",
             Toast.LENGTH_SHORT
         ).show()
+
+        val userData = mapObject.userData  as PlacemarkUserData
+
+        binding.apply {
+            menuPoint.visibility = View.VISIBLE
+            titleMenuPoint.text = userData.name
+        }
+
+        if (!isFocusRect) {
+            updateFocusInfo()
+        }
+
+        val cameraPosition = mapView.mapWindow.map.cameraPosition
+        val zoom = cameraPosition.zoom
+        val azimuth = cameraPosition.azimuth
+        val tilt = cameraPosition.tilt
+        val position = CameraPosition(
+            point,
+            zoom,
+            azimuth,
+            tilt
+        )
+        mapView.mapWindow.map.move(position)
+
         true
     }
     private val pinDragListener = object : MapObjectDragListener {
@@ -81,11 +109,20 @@ class MapFragment : Fragment() {
             clasterizedCollection.clusterPlacemarks(CLUSTER_RADIUS, CLUSTER_MIN_ZOOM)
         }
     }
-    private val placemarkTapListener = MapObjectTapListener { mapObject, _ ->
-        true
-    }
     private val singlePlacemarkTapListener = MapObjectTapListener { _, _ ->
         true
+    }
+
+    fun updateFocusInfo(){
+        val bottomPadding = binding.menuPoint.measuredHeight
+        mapView.mapWindow.focusRect = ScreenRect(
+            ScreenPoint(0f, 0f),
+            ScreenPoint(
+                mapView.mapWindow.width().toFloat(),
+                mapView.mapWindow.height().toFloat() - bottomPadding,
+            )
+        )
+        isFocusRect = true
     }
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -117,6 +154,13 @@ class MapFragment : Fragment() {
             Animation(Animation.Type.LINEAR, 1f),
             null
         )
+
+        binding.apply {
+            closeMenuPoint.setOnClickListener {
+                menuPoint.visibility = View.INVISIBLE
+            }
+        }
+
     }
     private fun creatingPointInterest(){
         val map = mapView.mapWindow.map
