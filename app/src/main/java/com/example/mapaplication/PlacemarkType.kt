@@ -7,6 +7,7 @@ enum class PlacemarkType {
 }
 
 data class PlacemarkUserData(
-    val name: String,
+    val title: String,
+    val description: String,
     val type: PlacemarkType,
 )
