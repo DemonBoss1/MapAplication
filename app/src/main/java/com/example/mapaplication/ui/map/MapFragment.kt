@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.mapaplication.DataBase
 import com.example.mapaplication.PlacemarkType
 import com.example.mapaplication.PlacemarkUserData
 import com.example.mapaplication.R
@@ -44,7 +45,7 @@ class MapFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-    //private val map = mapView.map
+    private val dataBase = DataBase.get()
 
     private val clusterListener = ClusterListener { cluster ->
         val placemarkTypes = cluster.placemarks.map {
@@ -108,9 +109,6 @@ class MapFragment : Fragment() {
             // Updates clusters position
             clasterizedCollection.clusterPlacemarks(CLUSTER_RADIUS, CLUSTER_MIN_ZOOM)
         }
-    }
-    private val singlePlacemarkTapListener = MapObjectTapListener { _, _ ->
-        true
     }
 
     fun updateFocusInfo(){
