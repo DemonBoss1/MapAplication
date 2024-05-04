@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.mapaplication.DataBase
+import com.example.mapaplication.InterestPoint
 import com.example.mapaplication.PlacemarkType
 import com.example.mapaplication.PlacemarkUserData
 import com.example.mapaplication.R
@@ -45,7 +46,7 @@ class MapFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-    private val dataBase = DataBase.get()
+    private val dataBase = DataBase.getDataBase()
 
     private val clusterListener = ClusterListener { cluster ->
         val placemarkTypes = cluster.placemarks.map {
@@ -78,7 +79,8 @@ class MapFragment : Fragment() {
 
         binding.apply {
             menuPoint.visibility = View.VISIBLE
-            titleMenuPoint.text = userData.name
+            titleMenuPoint.text = userData.title
+            descriptionMenuPoint.text = userData.description
         }
 
         if (!isFocusRect) {
@@ -197,7 +199,10 @@ class MapFragment : Fragment() {
                 isDraggable = true
                 setDragListener(pinDragListener)
                 // Put any data in MapObject
-                userData = PlacemarkUserData("Data_$index", type)
+                val data = PlacemarkUserData("Data_$index","", PlacemarkType.ARCHITECTURE)
+                val interestPoint = InterestPoint(data, point)
+                //DataBase.getRef().push().setValue(interestPoint)
+                userData = data
                 addTapListener(placemarkTapListener)
             }
         }
