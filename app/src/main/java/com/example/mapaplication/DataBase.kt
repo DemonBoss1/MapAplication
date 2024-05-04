@@ -10,8 +10,9 @@ class DataBase private constructor() {
 
     private val POINT_KEY = "InterestPoint"
 
-    private var firebaseDatabase: FirebaseDatabase = FirebaseDatabase.getInstance("https://the-secret-of-cities-default-rtdb.europe-west1.firebasedatabase.app")
-    private var pointReference: DatabaseReference = firebaseDatabase.getReference(POINT_KEY)
+    val firebaseDatabase: FirebaseDatabase = FirebaseDatabase.getInstance("https://the-secret-of-cities-default-rtdb.europe-west1.firebasedatabase.app")
+    val pointReference: DatabaseReference = firebaseDatabase.getReference(POINT_KEY)
+    val pointList = arrayListOf<InterestPoint>()
 
     init {
         dataFromDB
@@ -19,8 +20,18 @@ class DataBase private constructor() {
 
     private val dataFromDB: Unit
         get() {
+
             val valueEventListener: ValueEventListener = object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {}
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if(pointList.isNotEmpty())pointList.clear();
+                    for (ds in snapshot.children) {
+                        val point = ds.getValue(InterestPoint::class.java)
+                        if (point != null)
+                            pointList.add(point)
+                    }
+                    if(isWait) MapManager.creatingPointInterest()
+                    isWait = false
+                }
                 override fun onCancelled(error: DatabaseError) {}
             }
             pointReference.addValueEventListener(valueEventListener)
@@ -28,17 +39,9 @@ class DataBase private constructor() {
 
     companion object {
         private var dataBase: DataBase? = null
+        var isWait = true
         fun updateFirebaseDatabase() {
-            dataBase!!.firebaseDatabase =
-                FirebaseDatabase.getInstance("https://the-secret-of-cities-default-rtdb.europe-west1.firebasedatabase.app")
-            dataBase!!.pointReference = dataBase!!.firebaseDatabase.getReference(
-                dataBase!!.POINT_KEY
-            )
             dataBase!!.dataFromDB
-        }
-
-        fun getRef(): DatabaseReference {
-            return getDataBase()!!.pointReference
         }
 
         fun getDataBase(): DataBase? {
