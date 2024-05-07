@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.mapaplication.DataBase
+import com.example.mapaplication.Filters
 import com.example.mapaplication.InterestPoint
 import com.example.mapaplication.MapManager
 import com.example.mapaplication.PlacemarkType
@@ -57,6 +58,37 @@ class MapFragment : Fragment() {
         binding.apply {
             closeMenuPoint.setOnClickListener {
                 menuPoint.visibility = View.INVISIBLE
+            }
+            filtersButton.setOnClickListener {
+                filtersButton.visibility = View.INVISIBLE
+                filterMenu.visibility = View.VISIBLE
+            }
+            closeMenuFilter.setOnClickListener {
+                filtersButton.visibility = View.VISIBLE
+                filterMenu.visibility = View.INVISIBLE
+
+            }
+            filterReset.setOnClickListener{
+                checkBoxCafe.isChecked = false
+                checkBoxHotel.isChecked = false
+                checkBoxLandmark.isChecked = false
+
+                MapManager.resetFilter()
+            }
+            filterApply.setOnClickListener {
+
+                val filter = Filters(
+                    checkBoxCafe.isChecked,
+                    checkBoxHotel.isChecked,
+                    checkBoxLandmark.isChecked
+                )
+                MapManager.setFilters(filter)
+
+                MapManager.filterApply()
+
+                filtersButton.visibility = View.VISIBLE
+                filterMenu.visibility = View.INVISIBLE
+
             }
         }
 

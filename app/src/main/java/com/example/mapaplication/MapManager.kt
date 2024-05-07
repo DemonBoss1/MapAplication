@@ -57,11 +57,6 @@ class MapManager private constructor(private val activity: Context, private val 
         true
     }
     private val placemarkTapListener = MapObjectTapListener { mapObject, point ->
-        Toast.makeText(
-            activity,
-            "Tapped the point (${point.longitude}, ${point.latitude})",
-            Toast.LENGTH_SHORT
-        ).show()
 
         val userData = mapObject.userData  as PlacemarkUserData
 
@@ -100,6 +95,7 @@ class MapManager private constructor(private val activity: Context, private val 
             clasterizedCollection.clusterPlacemarks(CLUSTER_RADIUS, CLUSTER_MIN_ZOOM)
         }
     }
+    private var filters: Filters? = null
 
     fun updateFocusInfo(){
         val bottomPadding = binding.menuPoint.measuredHeight
@@ -158,7 +154,10 @@ class MapManager private constructor(private val activity: Context, private val 
                 // Add pins to the clusterized collection
 
                 val placemarkTypeToImageProvider = mapOf(
-                    PlacemarkType.CAFE to ImageProvider.fromResource(activity, R.drawable.cafe_ic),
+                    PlacemarkType.CAFE to ImageProvider.fromResource(
+                        activity,
+                        R.drawable.cafe_ic
+                    ),
                     PlacemarkType.ARCHITECTURE to ImageProvider.fromResource(
                         activity,
                         R.drawable.landmark_icon
@@ -168,62 +167,59 @@ class MapManager private constructor(private val activity: Context, private val 
                         R.drawable.ic_hotel
                     ),
                 )
-                if (points.isEmpty())
-                    Log.e("point", "points.isEmpty")
-                points.forEachIndexed { index, point ->
-                    Log.w(
-                        "point",
-                        "Tapped the point (${point.point.longitude}, ${point.point.latitude})"
-                    )
-                    val type = point!!.data.type
-                    val imageProvider = placemarkTypeToImageProvider[type] ?: return
-                    clasterizedCollection.addPlacemark().apply {
-                        Toast.makeText(
-                            activity,
-                            "Tapped the point (${index})",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        geometry = point.point
-                        setIcon(imageProvider, IconStyle().apply {
-                            anchor = PointF(0.5f, 1.0f)
-                            scale = 0.4f
-                        })
-                        // If we want to make placemarks draggable, we should call
-                        // clasterizedCollection.clusterPlacemarks on onMapObjectDragEnd
-                        isDraggable = true
-                        setDragListener(pinDragListener)
-                        // Put any data in MapObject
-                        //val data = PlacemarkUserData("Data_$index","", PlacemarkType.ARCHITECTURE)
-                        //val interestPoint = InterestPoint(data, point)
-                        val interestPoints = arrayListOf<InterestPoint>(
-                            InterestPoint(PlacemarkUserData("Стадион", "Стадион «Нижний Новгород» — это многофункциональный спортивный комплекс, домашняя арена футбольного клуба «Пари Нижний Новгород» и один из лучших стадионов в мире.", PlacemarkType.ARCHITECTURE), Point(56.337727, 43.963353)),
-                            InterestPoint(PlacemarkUserData("Кафедральный собор", "Кафедральный собор во имя Святого Благоверного Князя Александра Невского", PlacemarkType.ARCHITECTURE), Point(56.333621, 43.971271)),
-                            InterestPoint(PlacemarkUserData("Нижегородская ярмарка", "Выставочный центр «Нижегородская ярмарка» — это место, где можно посетить множество выставок, концертов, фестивалей и других культурных мероприятий, а также купить сувениры. В зимнее время здесь работает ледяной лабиринт «Снежная королева», где можно прокатиться на ледяных горках.", PlacemarkType.ARCHITECTURE), Point(56.328300, 43.961199)),
-                            InterestPoint(PlacemarkUserData("Нижегородский государственный цирк имени Маргариты Назаровой", "В Нижегородском государственном цирке им. Маргариты Назаровой можно увидеть выступления акробатов, воздушных гимнастов, дрессировщиков, клоунов, а также шоу с участием белых медведей, собак породы самоед и других животных.", PlacemarkType.ARCHITECTURE), Point(56.318548, 43.953339)),
-                            InterestPoint(PlacemarkUserData("Архитектурно-этнографический музей-заповедник Щёлоковский хутор", "Этнографический парк-музей «Щёлоковский хутор» — это уникальное место, где можно погрузиться в атмосферу русской деревни XIX века. Здесь можно увидеть различные деревянные постройки, такие как избы, церкви, амбары и другие объекты, которые были восстановлены и отреставрированы.", PlacemarkType.ARCHITECTURE), Point(56.274019, 44.010644)),
-                            InterestPoint(PlacemarkUserData("Нижегородский кремль", "Нижегородский кремль — это одна из главных достопримечательностей Нижнего Новгорода. Он был основан в XII веке и с тех пор претерпел множество изменений. В XVI веке крепость использовалась в качестве оборонительного сооружения, а в XVII веке стала административным центром губернии.", PlacemarkType.ARCHITECTURE), Point(56.328437, 44.003111)),
-                            InterestPoint(PlacemarkUserData("Чкаловская лестница", "Чкаловская лестница, также известная как Волжская или Волжская лестница, является монументальным сооружением, расположенным в городе Нижний Новгород, Россия.", PlacemarkType.ARCHITECTURE), Point(56.330872, 44.009461)),
-                            InterestPoint(PlacemarkUserData("Мужской монастырь", "Вознесенский Печерский мужской монастырь", PlacemarkType.ARCHITECTURE), Point(56.323073, 44.049733)),
-                            InterestPoint(PlacemarkUserData("Marins Park Hotel Нижний Новгород", "Гостиница «Marins Park Hotel Нижний Новгород» расположена в Нижнем Новгороде, недалеко от железнодорожного вокзала.", PlacemarkType.HOTEL), Point(56.325373, 43.958653)),
-                            InterestPoint(PlacemarkUserData("Никитин", "Гостиница «Никитин» расположена в старинном трехэтажном здании из красного кирпича на берегу слияния рек Волги и Оки, недалеко от кафедрального собора Александра Невского. Гостям предлагается проживание в просторных и комфортабельных номерах с высокими потолками и большим количеством окон.", PlacemarkType.HOTEL), Point(56.334846, 43.971025)),
-                            InterestPoint(PlacemarkUserData("AZIMUT", "AZIMUT Отель Нижний Новгород расположен на высоком берегу реки Оки, откуда открывается великолепный вид на город и реку. Отель предлагает своим гостям номера различных категорий, включая полулюксы, люксы и видовые номера.", PlacemarkType.HOTEL), Point(56.323664, 43.980878)),
-                            InterestPoint(PlacemarkUserData("Гранд Отель ОКА Премиум", "Гранд Отель «ОКА Премиум» — это четырехзвездочный отель, расположенный недалеко от парка «Швейцария». Он предлагает своим гостям комфортабельные номера с бесплатным доступом к сауне и бассейну, а также бесплатный фитнес-зал.", PlacemarkType.HOTEL), Point(56.293501, 43.979932)),
-                            InterestPoint(PlacemarkUserData("Ланселот", "Кафе «Ланселот» — это уютное место, где можно провести время в приятной атмосфере, наслаждаясь вкусной едой и живой музыкой.", PlacemarkType.CAFE), Point(56.328966, 43.954154)),
-                            InterestPoint(PlacemarkUserData("Ташир Пицца", "", PlacemarkType.CAFE), Point(56.318413, 43.925630)),
-                            InterestPoint(PlacemarkUserData("Портер", "Бар «Портер», расположенный в Нижнем Новгороде, предлагает своим гостям широкий выбор крафтового пива, коктейлей, вин и настоек, а также бизнес-ланчи и блюда европейской кухни.", PlacemarkType.CAFE), Point(56.317321, 43.994375)),
-                            InterestPoint(PlacemarkUserData("Патрон", "Ресторан «Патрон» специализируется на блюдах из мяса диких животных, таких как лось, косуля, кабан и пятнистый олень, а также на пельменях и строганине. В меню также есть рыба и десерты, такие как «Яблоко» и «Шишка».", PlacemarkType.CAFE), Point(56.330204, 44.020651)),
-                            InterestPoint(PlacemarkUserData("Рога и Копыта", "«Рога и Копыта» — это бар, расположенный на улице Рождественской в Нижнем Новгороде.", PlacemarkType.CAFE), Point(56.326641, 43.981567)),
-                        )
-                        interestPoints.forEach {interestPoint ->
-                            dataBase!!.pointReference.push().setValue(interestPoint)
+                points.forEachIndexed { _, point ->
+                    if(filters !=null && !filters!!.getsIntoFilter(point.data))
+                    else {
+                        val type = point.data.type
+                        val imageProvider = placemarkTypeToImageProvider[type] ?: return
+                        clasterizedCollection.addPlacemark().apply {
+                            geometry = point.point
+                            setIcon(imageProvider, IconStyle().apply {
+                                anchor = PointF(0.5f, 1.0f)
+                                scale = 0.4f
+                            })
+                            // If we want to make placemarks draggable, we should call
+                            // clasterizedCollection.clusterPlacemarks on onMapObjectDragEnd
+                            isDraggable = true
+                            setDragListener(pinDragListener)
+                            // Put any data in MapObject
+                            //val data = PlacemarkUserData("Data_$index","", PlacemarkType.ARCHITECTURE)
+                            //val interestPoint = InterestPoint(data, point)
+                            userData = point.data
+                            addTapListener(placemarkTapListener)
                         }
-                        userData = point.data
-                        addTapListener(placemarkTapListener)
                     }
                 }
 
                 clasterizedCollection.clusterPlacemarks(CLUSTER_RADIUS, CLUSTER_MIN_ZOOM)
+
+//                val interestPoints = arrayListOf<InterestPoint>(
+//                    InterestPoint(
+//                        PlacemarkUserData(
+//                            "Стадион",
+//                            "Стадион «Нижний Новгород» — это многофункциональный спортивный комплекс, домашняя арена футбольного клуба «Пари Нижний Новгород» и один из лучших стадионов в мире.",
+//                            PlacemarkType.ARCHITECTURE
+//                        ),
+//                        Point(
+//                            56.337727,
+//                            43.963353
+//                        )
+//                    )
+//                )
+//                interestPoints.forEach {interestPoint ->
+//                    //dataBase!!.pointReference.push().setValue(interestPoint)
+//                }
             }
+        }
+        fun setFilters(filters: Filters){
+            mapManager?.filters = filters
+        }
+        fun resetFilter(){
+            mapManager?.filters = null
+        }
+        fun filterApply(){
+            mapManager?.clasterizedCollection?.clear()
+            creatingPointInterest()
         }
     }
 
