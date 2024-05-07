@@ -58,6 +58,7 @@ class MapFragment : Fragment() {
         binding.apply {
             closeMenuPoint.setOnClickListener {
                 menuPoint.visibility = View.INVISIBLE
+                message.setText("")
             }
             filtersButton.setOnClickListener {
                 filtersButton.visibility = View.INVISIBLE
