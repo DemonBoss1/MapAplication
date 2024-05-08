@@ -44,7 +44,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/userImage"
             android:layout_width="300dp"
             android:layout_height="300dp"
             android:src="@drawable/incognito"
@@ -70,7 +70,8 @@
                 android:id="@+id/editNameButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Edit" />
+                android:text="Edit"
+                android:onClick="editName"/>
         </LinearLayout>
     </LinearLayout>
 

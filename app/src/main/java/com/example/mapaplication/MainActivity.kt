@@ -1,8 +1,12 @@
 package com.example.mapaplication
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -16,6 +20,13 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
+    private val getImageForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+        result: ActivityResult ->
+        if(result.resultCode == Activity.RESULT_OK){
+            binding.userImage.setImageURI(result.data?.data)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         MapKitFactory.setApiKey("8e68e3bf-421b-4ae6-ac02-7d71e41c9c36")
@@ -24,6 +35,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         recordingUserName()
+
+        binding.userImage.setOnClickListener {
+            intent = Intent()
+            intent.type = "image/*"
+            intent.action = Intent.ACTION_GET_CONTENT
+            getImageForResult.launch(intent)
+        }
 
         val navView: BottomNavigationView = binding.navView
 
@@ -44,15 +62,15 @@ class MainActivity : AppCompatActivity() {
         Setting.get(getSharedPreferences("setting", Context.MODE_PRIVATE))
         if(Setting.pref.contains("username")){
             Setting.username = Setting.pref.getString("username", "").toString()
-            binding.usernameMenu.visibility = View.INVISIBLE
+            //binding.usernameMenu.visibility = View.GONE
         }
     }
-    fun editName(){
+    fun editName(view: View){
         val username = binding.editTextName.text.toString()
         Setting.username = username
         val edit = Setting.pref.edit()
         edit.putString("username",username).apply()
-        binding.usernameMenu.visibility = View.INVISIBLE
+        binding.usernameMenu.visibility = View.GONE
 
     }
 }
