@@ -1,6 +1,8 @@
 package com.example.mapaplication
 
+import android.content.Context
 import android.os.Bundle
+import android.view.View
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -21,6 +23,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        recordingUserName()
+
         val navView: BottomNavigationView = binding.navView
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
@@ -34,5 +38,21 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+    }
+
+    fun recordingUserName(){
+        Setting.get(getSharedPreferences("setting", Context.MODE_PRIVATE))
+        if(Setting.pref.contains("username")){
+            Setting.username = Setting.pref.getString("username", "").toString()
+            binding.usernameMenu.visibility = View.INVISIBLE
+        }
+    }
+    fun editName(){
+        val username = binding.editTextName.text.toString()
+        Setting.username = username
+        val edit = Setting.pref.edit()
+        edit.putString("username",username).apply()
+        binding.usernameMenu.visibility = View.INVISIBLE
+
     }
 }
