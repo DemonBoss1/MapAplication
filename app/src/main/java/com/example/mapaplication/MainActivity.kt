@@ -58,10 +58,11 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
     }
 
-    fun recordingUserName(){
+    private fun recordingUserName(){
         Setting.get(getSharedPreferences("setting", Context.MODE_PRIVATE))
         if(Setting.pref.contains("username")){
             Setting.username = Setting.pref.getString("username", "").toString()
+            Setting.ID = Setting.pref.getString("ID", "").toString()
             //binding.usernameMenu.visibility = View.GONE
         }
     }
@@ -70,6 +71,12 @@ class MainActivity : AppCompatActivity() {
         Setting.username = username
         val edit = Setting.pref.edit()
         edit.putString("username",username).apply()
+
+        val ref = DataBase.getDataBase()!!.userReference.push()
+        edit.putString("ID",ref.key).apply()
+        DataBase.uploadImage(binding.userImage.drawable)
+
+
         binding.usernameMenu.visibility = View.GONE
 
     }
