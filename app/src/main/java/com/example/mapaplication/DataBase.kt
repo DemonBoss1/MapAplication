@@ -20,7 +20,7 @@ import java.io.ByteArrayOutputStream
 class DataBase private constructor() {
 
     private val POINT_KEY = "InterestPoint"
-    private val USER_KEY = "USER"
+    private val USER_KEY = "User"
     private val PICTURE_KEY = "ProfilePicture"
 
     private val firebaseDatabase: FirebaseDatabase = FirebaseDatabase.getInstance("https://the-secret-of-cities-default-rtdb.europe-west1.firebasedatabase.app")
