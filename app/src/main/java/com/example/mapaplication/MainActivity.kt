@@ -75,7 +75,9 @@ class MainActivity : AppCompatActivity() {
         val ref = DataBase.getDataBase()!!.userReference.push()
         edit.putString("ID",ref.key).apply()
         DataBase.uploadImage(binding.userImage.drawable)
+        Setting.ID = ref.key!!
 
+        ref.setValue(User(ref.key!!, username))
 
         binding.usernameMenu.visibility = View.GONE
 
