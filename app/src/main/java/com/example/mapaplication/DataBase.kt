@@ -71,7 +71,7 @@ class DataBase private constructor() {
         fun uploadImage(drawable: Drawable){
             val bitMap = (drawable as BitmapDrawable).bitmap
             val baos = ByteArrayOutputStream()
-            bitMap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+            bitMap.compress(Bitmap.CompressFormat.PNG, 20, baos)
             val byteArray = baos.toByteArray()
             val mRef = dataBase?.storageRef?.child(Setting.ID)
             val up = mRef?.putBytes(byteArray)

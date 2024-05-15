@@ -93,7 +93,7 @@
                     app:layout_constraintTop_toBottomOf="@id/description_menu_point">
 
                     <ImageView
-                        android:id="@+id/imageView"
+                        android:id="@+id/user_image_in_message"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_marginRight="10dp"

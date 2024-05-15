@@ -2,6 +2,7 @@ package com.example.mapaplication.ui.map
 
 import android.graphics.PointF
 import android.icu.text.SimpleDateFormat
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,6 +19,7 @@ import com.example.mapaplication.PlacemarkUserData
 import com.example.mapaplication.R
 import com.example.mapaplication.Setting
 import com.example.mapaplication.databinding.FragmentMapBinding
+import com.squareup.picasso.Picasso
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.ScreenPoint
@@ -64,10 +66,19 @@ class MapFragment : Fragment() {
                 messageSet.setText("")
             }
             sentMessage.setOnClickListener {
-                val message = messageSet.text.toString()
+                val message = messageSet.text
                 messageGet.text = message
                 messageSet.text.clear()
+
+                val mRef = DataBase.getDataBase()!!.storageRef.child(Setting.ID)
+                var a1: Uri
+                mRef.downloadUrl.addOnSuccessListener {
+                    a1 = it
+                    Picasso.get().load(a1).into(userImageInMessage)
+                }
+
                 username.text = Setting.username
+
                 val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
                 val currentDate = sdf.format(Date())
                 dateTime.text = currentDate
