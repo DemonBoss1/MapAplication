@@ -74,8 +74,8 @@ class MainActivity : AppCompatActivity() {
 
         val ref = DataBase.getDataBase()!!.userReference.push()
         edit.putString("ID",ref.key).apply()
-        DataBase.uploadImage(binding.userImage.drawable)
         Setting.ID = ref.key!!
+        DataBase.uploadImage(binding.userImage.drawable)
 
         ref.setValue(User(ref.key!!, username))
 

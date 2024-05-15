@@ -1,6 +1,7 @@
 package com.example.mapaplication.ui.map
 
 import android.graphics.PointF
+import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,6 +16,7 @@ import com.example.mapaplication.MapManager
 import com.example.mapaplication.PlacemarkType
 import com.example.mapaplication.PlacemarkUserData
 import com.example.mapaplication.R
+import com.example.mapaplication.Setting
 import com.example.mapaplication.databinding.FragmentMapBinding
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKitFactory
@@ -33,6 +35,7 @@ import com.yandex.mapkit.mapview.MapView
 import com.yandex.mapkitdemo.objects.ClusterView
 import com.yandex.runtime.image.ImageProvider
 import com.yandex.runtime.ui_view.ViewProvider
+import java.util.Date
 
 class MapFragment : Fragment() {
     private lateinit var mapView: MapView
@@ -58,8 +61,18 @@ class MapFragment : Fragment() {
         binding.apply {
             closeMenuPoint.setOnClickListener {
                 menuPoint.visibility = View.INVISIBLE
-                message.setText("")
+                messageSet.setText("")
             }
+            sentMessage.setOnClickListener {
+                val message = messageSet.text.toString()
+                messageGet.text = message
+                messageSet.text.clear()
+                username.text = Setting.username
+                val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
+                val currentDate = sdf.format(Date())
+                dateTime.text = currentDate
+            }
+
             filtersButton.setOnClickListener {
                 filtersButton.visibility = View.INVISIBLE
                 filterMenu.visibility = View.VISIBLE
