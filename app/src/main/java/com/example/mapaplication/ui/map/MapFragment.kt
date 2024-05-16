@@ -1,42 +1,29 @@
 package com.example.mapaplication.ui.map
 
-import android.graphics.PointF
 import android.icu.text.SimpleDateFormat
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.mapaplication.DataBase
 import com.example.mapaplication.Filters
-import com.example.mapaplication.InterestPoint
 import com.example.mapaplication.MapManager
-import com.example.mapaplication.PlacemarkType
-import com.example.mapaplication.PlacemarkUserData
-import com.example.mapaplication.R
+import com.example.mapaplication.Message
 import com.example.mapaplication.Setting
+import com.example.mapaplication.User
 import com.example.mapaplication.databinding.FragmentMapBinding
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.getValue
+import com.google.firebase.database.ktx.values
+import com.google.firebase.database.values
 import com.squareup.picasso.Picasso
-import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKitFactory
-import com.yandex.mapkit.ScreenPoint
-import com.yandex.mapkit.ScreenRect
-import com.yandex.mapkit.geometry.Point
-import com.yandex.mapkit.map.CameraPosition
-import com.yandex.mapkit.map.ClusterListener
-import com.yandex.mapkit.map.ClusterTapListener
-import com.yandex.mapkit.map.ClusterizedPlacemarkCollection
-import com.yandex.mapkit.map.IconStyle
-import com.yandex.mapkit.map.MapObject
-import com.yandex.mapkit.map.MapObjectDragListener
-import com.yandex.mapkit.map.MapObjectTapListener
 import com.yandex.mapkit.mapview.MapView
-import com.yandex.mapkitdemo.objects.ClusterView
-import com.yandex.runtime.image.ImageProvider
-import com.yandex.runtime.ui_view.ViewProvider
+import kotlinx.coroutines.flow.Flow
 import java.util.Date
 
 class MapFragment : Fragment() {
@@ -70,18 +57,21 @@ class MapFragment : Fragment() {
                 messageGet.text = message
                 messageSet.text.clear()
 
-                val mRef = DataBase.getDataBase()!!.storageRef.child(Setting.ID)
-                var a1: Uri
-                mRef.downloadUrl.addOnSuccessListener {
-                    a1 = it
-                    Picasso.get().load(a1).into(userImageInMessage)
-                }
+                DataBase.getDataBase()!!
+                    .userReference
+                    .child(Setting.ID)
+                    .get().addOnCompleteListener {
+                        val user: User? = it.result.getValue<User>()
+                        if (user != null)
+                            Picasso.get().load(user.imageUri).into(userImageInMessage)
+                    }
 
                 username.text = Setting.username
 
                 val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
                 val currentDate = sdf.format(Date())
                 dateTime.text = currentDate
+                Message(message.toString(), Setting.username, currentDate)
             }
 
             filtersButton.setOnClickListener {

@@ -22,10 +22,12 @@ class DataBase private constructor() {
     private val POINT_KEY = "InterestPoint"
     private val USER_KEY = "User"
     private val PICTURE_KEY = "ProfilePicture"
+    private val MESSAGE_KEY = "Message"
 
     private val firebaseDatabase: FirebaseDatabase = FirebaseDatabase.getInstance("https://the-secret-of-cities-default-rtdb.europe-west1.firebasedatabase.app")
     private val pointReference: DatabaseReference = firebaseDatabase.getReference(POINT_KEY)
     val userReference: DatabaseReference = firebaseDatabase.getReference(USER_KEY)
+    val messageReference: DatabaseReference = firebaseDatabase.getReference(MESSAGE_KEY)
 
     private val storage = FirebaseStorage.getInstance("gs://the-secret-of-cities.appspot.com")
     var storageRef = storage.getReference(PICTURE_KEY)
@@ -75,6 +77,14 @@ class DataBase private constructor() {
             val byteArray = baos.toByteArray()
             val mRef = dataBase?.storageRef?.child(Setting.ID)
             val up = mRef?.putBytes(byteArray)
+            up?.addOnCompleteListener {
+                var imageUri: Uri
+                mRef.downloadUrl.addOnSuccessListener {
+                    imageUri = it
+                    val user = User(Setting.ID, Setting.username, imageUri.toString())
+                    dataBase?.userReference?.child(Setting.ID)?.setValue(user)
+                }
+            }
 
         }
     }
