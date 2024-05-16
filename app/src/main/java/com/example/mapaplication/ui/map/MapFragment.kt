@@ -53,7 +53,7 @@ class MapFragment : Fragment() {
                 messageSet.setText("")
             }
             sentMessage.setOnClickListener {
-                val message = messageSet.text
+                val message = messageSet.text.toString()
                 messageGet.text = message
                 messageSet.text.clear()
 
@@ -71,7 +71,11 @@ class MapFragment : Fragment() {
                 val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
                 val currentDate = sdf.format(Date())
                 dateTime.text = currentDate
-                Message(message.toString(), Setting.username, currentDate)
+
+                DataBase.getDataBase()!!.messageReference.push()
+                    .setValue(
+                        Message(message, Setting.ID, currentDate)
+                    )
             }
 
             filtersButton.setOnClickListener {

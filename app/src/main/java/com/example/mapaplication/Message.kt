@@ -4,7 +4,7 @@ import java.util.Date
 
 class Message() {
 
-    lateinit var interestPointID: String
+    //lateinit var interestPointID: String
     lateinit var message: String
     lateinit var userId: String
     lateinit var date: String
