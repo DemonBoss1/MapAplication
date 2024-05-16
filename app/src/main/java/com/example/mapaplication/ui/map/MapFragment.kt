@@ -7,10 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mapaplication.DataBase
 import com.example.mapaplication.Filters
 import com.example.mapaplication.MapManager
 import com.example.mapaplication.Message
+import com.example.mapaplication.MessageAdapter
 import com.example.mapaplication.Setting
 import com.example.mapaplication.User
 import com.example.mapaplication.databinding.FragmentMapBinding
@@ -30,6 +32,9 @@ class MapFragment : Fragment() {
     private lateinit var mapView: MapView
     private var _binding: FragmentMapBinding? = null
     val binding get() = _binding!!
+
+    val messageList = ArrayList<Message>()
+    val adapter = MessageAdapter(messageList)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,29 +59,19 @@ class MapFragment : Fragment() {
             }
             sentMessage.setOnClickListener {
                 val message = messageSet.text.toString()
-                messageGet.text = message
                 messageSet.text.clear()
-
-                DataBase.getDataBase()!!
-                    .userReference
-                    .child(Setting.ID)
-                    .get().addOnCompleteListener {
-                        val user: User? = it.result.getValue<User>()
-                        if (user != null)
-                            Picasso.get().load(user.imageUri).into(userImageInMessage)
-                    }
-
-                username.text = Setting.username
 
                 val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
                 val currentDate = sdf.format(Date())
-                dateTime.text = currentDate
 
-                DataBase.getDataBase()!!.messageReference.push()
-                    .setValue(
-                        Message(message, Setting.ID, currentDate)
-                    )
+                val mes = Message(message, Setting.ID, currentDate)
+                messageList.add(mes)
+                adapter.notifyDataSetChanged()
+
+                DataBase.getDataBase()!!.messageReference.push().setValue(mes)
             }
+            messages.layoutManager = object : LinearLayoutManager(activity) { override fun canScrollVertically() = false }
+            messages.adapter = adapter
 
             filtersButton.setOnClickListener {
                 filtersButton.visibility = View.INVISIBLE
