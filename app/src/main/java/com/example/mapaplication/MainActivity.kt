@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
         if(Setting.pref.contains("username")){
             Setting.username = Setting.pref.getString("username", "").toString()
             Setting.ID = Setting.pref.getString("ID", "").toString()
-            //binding.usernameMenu.visibility = View.GONE
+            binding.usernameMenu.visibility = View.GONE
         }
     }
     fun editName(view: View){

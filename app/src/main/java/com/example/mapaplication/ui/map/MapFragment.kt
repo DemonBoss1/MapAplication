@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mapaplication.DataBase
 import com.example.mapaplication.Filters
+import com.example.mapaplication.InterestPoint
 import com.example.mapaplication.MapManager
 import com.example.mapaplication.Message
 import com.example.mapaplication.MessageAdapter
@@ -52,6 +53,23 @@ class MapFragment : Fragment() {
     private fun init(){
         MapKitFactory.initialize(activity)
         mapView = binding.mapview
+
+        DataBase.getDataBase()!!.messageReference.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (ds in snapshot.children) {
+                    val message = ds.getValue(Message::class.java)
+                    if (message != null)
+                        messageList.add(message)
+                }
+                adapter.notifyDataSetChanged()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
+
         binding.apply {
             closeMenuPoint.setOnClickListener {
                 menuPoint.visibility = View.INVISIBLE
