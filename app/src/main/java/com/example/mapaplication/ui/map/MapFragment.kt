@@ -10,12 +10,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mapaplication.DataBase
-import com.example.mapaplication.Filters
-import com.example.mapaplication.MapManager
-import com.example.mapaplication.Message
-import com.example.mapaplication.MessageAdapter
-import com.example.mapaplication.PlacemarkType
-import com.example.mapaplication.PlacemarkUserData
 import com.example.mapaplication.R
 import com.example.mapaplication.Setting
 import com.example.mapaplication.databinding.FragmentMapBinding
@@ -34,7 +28,6 @@ import com.yandex.mapkit.map.MapObject
 import com.yandex.mapkit.map.MapObjectDragListener
 import com.yandex.mapkit.map.MapObjectTapListener
 import com.yandex.mapkit.mapview.MapView
-import com.yandex.mapkitdemo.objects.ClusterView
 import com.yandex.runtime.image.ImageProvider
 import com.yandex.runtime.ui_view.ViewProvider
 import java.util.Date

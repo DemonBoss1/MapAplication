@@ -1,29 +1,11 @@
-package com.example.mapaplication
+package com.example.mapaplication.ui.map
 
-import android.content.Context
-import android.graphics.PointF
-import android.util.Log
-import android.view.View
-import android.widget.Toast
-import androidx.fragment.app.Fragment
-import com.example.mapaplication.databinding.FragmentMapBinding
-import com.example.mapaplication.ui.map.MapFragment
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.ScreenPoint
 import com.yandex.mapkit.ScreenRect
 import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.map.CameraPosition
-import com.yandex.mapkit.map.ClusterListener
-import com.yandex.mapkit.map.ClusterTapListener
-import com.yandex.mapkit.map.ClusterizedPlacemarkCollection
-import com.yandex.mapkit.map.IconStyle
-import com.yandex.mapkit.map.MapObject
-import com.yandex.mapkit.map.MapObjectDragListener
-import com.yandex.mapkit.map.MapObjectTapListener
 import com.yandex.mapkit.mapview.MapView
-import com.yandex.mapkitdemo.objects.ClusterView
-import com.yandex.runtime.image.ImageProvider
-import com.yandex.runtime.ui_view.ViewProvider
 
 class MapManager private constructor(private val mapView: MapView) {
 

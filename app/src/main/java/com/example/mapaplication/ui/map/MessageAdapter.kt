@@ -1,9 +1,13 @@
-package com.example.mapaplication
+package com.example.mapaplication.ui.map
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mapaplication.DataBase
+import com.example.mapaplication.R
+import com.example.mapaplication.Setting
+import com.example.mapaplication.User
 import com.example.mapaplication.databinding.MessageLayoutBinding
 import com.google.firebase.database.getValue
 import com.squareup.picasso.Picasso

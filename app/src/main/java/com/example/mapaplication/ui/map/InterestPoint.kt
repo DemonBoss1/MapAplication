@@ -1,4 +1,4 @@
-package com.example.mapaplication
+package com.example.mapaplication.ui.map
 
 import com.yandex.mapkit.geometry.Point
 

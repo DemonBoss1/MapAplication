@@ -1,11 +1,10 @@
-package com.yandex.mapkitdemo.objects
+package com.example.mapaplication.ui.map
 
 import android.content.Context
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.view.isVisible
-import com.example.mapaplication.PlacemarkType
 import com.example.mapaplication.R
 
 class ClusterView(context: Context?) : LinearLayout(context) {

@@ -1,6 +1,4 @@
-package com.example.mapaplication
-
-import com.yandex.mapkit.geometry.Point
+package com.example.mapaplication.ui.map
 
 enum class PlacemarkType {
     ARCHITECTURE,

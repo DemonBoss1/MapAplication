@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import com.example.mapaplication.ui.map.InterestPoint
 import com.example.mapaplication.ui.map.MapFragment
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError

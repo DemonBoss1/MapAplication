@@ -1,4 +1,4 @@
-package com.example.mapaplication
+package com.example.mapaplication.ui.map
 
 data class Filters(
     val isCafe: Boolean,
