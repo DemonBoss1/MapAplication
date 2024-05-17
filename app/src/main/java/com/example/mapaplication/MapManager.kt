@@ -196,6 +196,7 @@ class MapManager private constructor(private val activity: Context, private val 
 //                val interestPoints = arrayListOf<InterestPoint>(
 //                    InterestPoint(
 //                        PlacemarkUserData(
+//                            "",
 //                            "Стадион",
 //                            "Стадион «Нижний Новгород» — это многофункциональный спортивный комплекс, домашняя арена футбольного клуба «Пари Нижний Новгород» и один из лучших стадионов в мире.",
 //                            PlacemarkType.ARCHITECTURE
@@ -207,7 +208,9 @@ class MapManager private constructor(private val activity: Context, private val 
 //                    )
 //                )
 //                interestPoints.forEach {interestPoint ->
-//                    //dataBase!!.pointReference.push().setValue(interestPoint)
+//                    val ref = dataBase!!.pointReference.push()
+//                    interestPoint.data.id=ref.key.toString()
+//                    ref.setValue(interestPoint)
 //                }
             }
         }
