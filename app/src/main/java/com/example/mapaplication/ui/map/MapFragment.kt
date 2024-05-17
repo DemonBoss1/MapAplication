@@ -70,7 +70,7 @@ class MapFragment : Fragment() {
 
                 DataBase.getDataBase()!!.messageReference.push().setValue(mes)
             }
-            messages.layoutManager = object : LinearLayoutManager(activity) { override fun canScrollVertically() = false }
+            messages.layoutManager = LinearLayoutManager(activity)
             messages.adapter = adapter
 
             filtersButton.setOnClickListener {

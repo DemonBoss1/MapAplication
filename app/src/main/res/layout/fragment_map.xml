@@ -28,7 +28,7 @@
         android:id="@+id/menu_point"
         android:layout_width="match_parent"
         android:layout_height="400dp"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -82,14 +82,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/title_menu_point_layout" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/messages"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/description_menu_point" />
-
                 <LinearLayout
                     android:id="@+id/linearLayout"
                     android:layout_width="0dp"
@@ -98,7 +90,7 @@
                     android:padding="10dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/messages">
+                    app:layout_constraintTop_toBottomOf="@+id/description_menu_point">
 
                     <EditText
                         android:id="@+id/message_set"
@@ -109,8 +101,7 @@
                         android:ems="10"
                         android:gravity="bottom"
                         android:hint="Message"
-                        android:inputType="textMultiLine|textCapWords"
-                        android:minHeight="100dp" />
+                        android:inputType="textMultiLine|textCapWords" />
 
                     <Button
                         android:id="@+id/sentMessage"
@@ -120,6 +111,15 @@
                         android:layout_weight="0"
                         android:text="Sent" />
                 </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/messages"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/linearLayout" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
     </FrameLayout>
