@@ -25,89 +25,9 @@ import com.yandex.mapkitdemo.objects.ClusterView
 import com.yandex.runtime.image.ImageProvider
 import com.yandex.runtime.ui_view.ViewProvider
 
-private const val CLUSTER_RADIUS = 60.0
-private const val CLUSTER_MIN_ZOOM = 15
-
-class MapManager private constructor(private val activity: Context, private val binding: FragmentMapBinding) {
-    private val dataBase = DataBase.getDataBase()
-
-    private lateinit var mapView: MapView
-    private lateinit var clasterizedCollection: ClusterizedPlacemarkCollection
+class MapManager private constructor(private val mapView: MapView) {
 
     var isFocusRect = false
-
-    private val clusterListener = ClusterListener { cluster ->
-        val placemarkTypes = cluster.placemarks.map {
-            (it.userData as PlacemarkUserData).type
-        }
-        // Sets each cluster appearance using the custom view
-        // that shows a cluster's pins
-        cluster.appearance.setView(
-            ViewProvider(
-                ClusterView(activity).apply {
-                    setData(placemarkTypes)
-                }
-            )
-        )
-        cluster.appearance.zIndex = 100f
-
-        cluster.addClusterTapListener(clusterTapListener)
-    }
-    private val clusterTapListener = ClusterTapListener {
-        true
-    }
-    private val placemarkTapListener = MapObjectTapListener { mapObject, point ->
-
-        val userData = mapObject.userData  as PlacemarkUserData
-
-        binding.apply {
-            menuPoint.visibility = View.VISIBLE
-            titleMenuPoint.text = userData.title
-            descriptionMenuPoint.text = userData.description
-        }
-
-        if (!isFocusRect) {
-            updateFocusInfo()
-        }
-
-        val cameraPosition = mapView.mapWindow.map.cameraPosition
-        val zoom = cameraPosition.zoom
-        val azimuth = cameraPosition.azimuth
-        val tilt = cameraPosition.tilt
-        val position = CameraPosition(
-            point,
-            zoom,
-            azimuth,
-            tilt
-        )
-        mapView.mapWindow.map.move(position)
-
-        true
-    }
-    private val pinDragListener = object : MapObjectDragListener {
-        override fun onMapObjectDragStart(p0: MapObject) {
-        }
-
-        override fun onMapObjectDrag(p0: MapObject, p1: Point) = Unit
-
-        override fun onMapObjectDragEnd(p0: MapObject) {
-            // Updates clusters position
-            clasterizedCollection.clusterPlacemarks(CLUSTER_RADIUS, CLUSTER_MIN_ZOOM)
-        }
-    }
-    private var filters: Filters? = null
-
-    fun updateFocusInfo(){
-        val bottomPadding = binding.menuPoint.measuredHeight
-        mapView.mapWindow.focusRect = ScreenRect(
-            ScreenPoint(0f, 0f),
-            ScreenPoint(
-                mapView.mapWindow.width().toFloat(),
-                mapView.mapWindow.height().toFloat() - bottomPadding,
-            )
-        )
-        isFocusRect = true
-    }
 
     fun init(){
         val map = mapView.mapWindow.map
@@ -129,101 +49,28 @@ class MapManager private constructor(private val activity: Context, private val 
     companion object {
         private var mapManager: MapManager? = null
 
-        fun get(fragment: Fragment): MapManager?{
-            val fragmentMap = fragment as MapFragment
-            val activity = fragmentMap.activity
-            val binding = fragmentMap.binding
+        fun get(mapView: MapView): MapManager?{
             if (mapManager == null)
-                mapManager = activity?.let { MapManager(it, binding) }
-            mapManager!!.mapView = binding.mapview
-
+                mapManager = MapManager(mapView)
             return mapManager
         }
-        fun creatingPointInterest() {
+        fun getFocusRect(): Boolean {
+            return mapManager?.isFocusRect!!
+        }
+
+        fun updateFocusInfo(bottomPadding: Int){
             mapManager?.apply {
-                val map = mapView.mapWindow.map
-
-                val points = dataBase!!.pointList
-
-                val collection = map.mapObjects.addCollection()
-
-                // Add a clusterized collection
-                clasterizedCollection =
-                    collection.addClusterizedPlacemarkCollection(clusterListener)
-
-                // Add pins to the clusterized collection
-
-                val placemarkTypeToImageProvider = mapOf(
-                    PlacemarkType.CAFE to ImageProvider.fromResource(
-                        activity,
-                        R.drawable.cafe_ic
-                    ),
-                    PlacemarkType.ARCHITECTURE to ImageProvider.fromResource(
-                        activity,
-                        R.drawable.landmark_icon
-                    ),
-                    PlacemarkType.HOTEL to ImageProvider.fromResource(
-                        activity,
-                        R.drawable.ic_hotel
-                    ),
+                mapView.mapWindow.focusRect = ScreenRect(
+                    ScreenPoint(0f, 0f),
+                    ScreenPoint(
+                        mapView.mapWindow.width().toFloat(),
+                        mapView.mapWindow.height().toFloat() - bottomPadding,
+                    )
                 )
-                points.forEachIndexed { _, point ->
-                    if(filters !=null && !filters!!.getsIntoFilter(point.data))
-                    else {
-                        val type = point.data.type
-                        val imageProvider = placemarkTypeToImageProvider[type] ?: return
-                        clasterizedCollection.addPlacemark().apply {
-                            geometry = point.point
-                            setIcon(imageProvider, IconStyle().apply {
-                                anchor = PointF(0.5f, 1.0f)
-                                scale = 0.4f
-                            })
-                            // If we want to make placemarks draggable, we should call
-                            // clasterizedCollection.clusterPlacemarks on onMapObjectDragEnd
-                            isDraggable = true
-                            setDragListener(pinDragListener)
-                            // Put any data in MapObject
-                            //val data = PlacemarkUserData("Data_$index","", PlacemarkType.ARCHITECTURE)
-                            //val interestPoint = InterestPoint(data, point)
-                            userData = point.data
-                            addTapListener(placemarkTapListener)
-                        }
-                    }
-                }
-
-                clasterizedCollection.clusterPlacemarks(CLUSTER_RADIUS, CLUSTER_MIN_ZOOM)
-
-//                val interestPoints = arrayListOf<InterestPoint>(
-//                    InterestPoint(
-//                        PlacemarkUserData(
-//                            "",
-//                            "Стадион",
-//                            "Стадион «Нижний Новгород» — это многофункциональный спортивный комплекс, домашняя арена футбольного клуба «Пари Нижний Новгород» и один из лучших стадионов в мире.",
-//                            PlacemarkType.ARCHITECTURE
-//                        ),
-//                        Point(
-//                            56.337727,
-//                            43.963353
-//                        )
-//                    )
-//                )
-//                interestPoints.forEach {interestPoint ->
-//                    val ref = dataBase!!.pointReference.push()
-//                    interestPoint.data.id=ref.key.toString()
-//                    ref.setValue(interestPoint)
-//                }
+                isFocusRect = true
             }
         }
-        fun setFilters(filters: Filters){
-            mapManager?.filters = filters
-        }
-        fun resetFilter(){
-            mapManager?.filters = null
-        }
-        fun filterApply(){
-            mapManager?.clasterizedCollection?.clear()
-            creatingPointInterest()
-        }
+
     }
 
 }
