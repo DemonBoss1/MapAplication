@@ -3,7 +3,6 @@ package com.example.mapaplication
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.ActivityResult
@@ -15,7 +14,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.mapaplication.databinding.ActivityMainBinding
-import com.squareup.picasso.Picasso
 import com.yandex.mapkit.MapKitFactory
 
 class MainActivity : AppCompatActivity() {
@@ -64,7 +62,7 @@ class MainActivity : AppCompatActivity() {
         Setting.get(getSharedPreferences("setting", Context.MODE_PRIVATE))
         if(Setting.pref.contains("username")){
             Setting.username = Setting.pref.getString("username", "").toString()
-            Setting.ID = Setting.pref.getString("ID", "").toString()
+            Setting.UserId = Setting.pref.getString("ID", "").toString()
             binding.usernameMenu.visibility = View.GONE
         }
     }
@@ -75,8 +73,8 @@ class MainActivity : AppCompatActivity() {
         edit.putString("username",username).apply()
 
         val ref = DataBase.getDataBase()!!.userReference.push()
-        Setting.ID = ref.key.toString()
-        edit.putString("ID", Setting.ID).apply()
+        Setting.UserId = ref.key.toString()
+        edit.putString("ID", Setting.UserId).apply()
 
         DataBase.uploadImage(binding.userImage.drawable)
 

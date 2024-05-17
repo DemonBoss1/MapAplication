@@ -71,6 +71,7 @@ class MapManager private constructor(private val mapView: MapView) {
             }
         }
 
+
     }
 
 }

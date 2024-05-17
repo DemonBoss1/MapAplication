@@ -4,11 +4,12 @@ import java.util.Date
 
 class Message() {
 
-    //lateinit var interestPointID: String
+    lateinit var interestPointId: String
     lateinit var message: String
     lateinit var userId: String
     lateinit var date: String
-    constructor(_message: String, _userId: String, _date: String) : this() {
+    constructor(_interestPointId: String, _message: String, _userId: String, _date: String) : this() {
+        interestPointId = _interestPointId
         message = _message
         userId = _userId
         date = _date

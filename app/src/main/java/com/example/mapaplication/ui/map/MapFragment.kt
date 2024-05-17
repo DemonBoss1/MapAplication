@@ -2,7 +2,6 @@ package com.example.mapaplication.ui.map
 
 import android.graphics.PointF
 import android.icu.text.SimpleDateFormat
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mapaplication.DataBase
 import com.example.mapaplication.Filters
-import com.example.mapaplication.InterestPoint
 import com.example.mapaplication.MapManager
 import com.example.mapaplication.Message
 import com.example.mapaplication.MessageAdapter
@@ -20,15 +18,11 @@ import com.example.mapaplication.PlacemarkType
 import com.example.mapaplication.PlacemarkUserData
 import com.example.mapaplication.R
 import com.example.mapaplication.Setting
-import com.example.mapaplication.User
 import com.example.mapaplication.databinding.FragmentMapBinding
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.getValue
-import com.google.firebase.database.ktx.values
-import com.google.firebase.database.values
-import com.squareup.picasso.Picasso
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.map.CameraPosition
@@ -43,7 +37,6 @@ import com.yandex.mapkit.mapview.MapView
 import com.yandex.mapkitdemo.objects.ClusterView
 import com.yandex.runtime.image.ImageProvider
 import com.yandex.runtime.ui_view.ViewProvider
-import kotlinx.coroutines.flow.Flow
 import java.util.Date
 
 private const val CLUSTER_RADIUS = 60.0
@@ -99,6 +92,8 @@ class MapFragment : Fragment() {
 
         val userData = mapObject.userData  as PlacemarkUserData
 
+        Setting.currentPointId = userData.id
+
         binding.apply {
             menuPoint.visibility = View.VISIBLE
             titleMenuPoint.text = userData.title
@@ -121,6 +116,23 @@ class MapFragment : Fragment() {
         )
         mapView.mapWindow.map.move(position)
 
+        DataBase.getDataBase()!!.messageReference.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                messageList.clear()
+                for (ds in snapshot.children) {
+                    val message = ds.getValue<Message>()
+                    if (message != null && message.interestPointId == Setting.currentPointId)
+                        messageList.add(message)
+                }
+                adapter.notifyDataSetChanged()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(activity, "Error loading message", Toast.LENGTH_LONG).show();
+            }
+
+        })
+
         true
     }
 
@@ -129,6 +141,8 @@ class MapFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        mapFragment = this
+
         _binding = FragmentMapBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
@@ -141,26 +155,9 @@ class MapFragment : Fragment() {
         MapKitFactory.initialize(activity)
         mapView = binding.mapview
 
-        DataBase.getDataBase()!!.messageReference.addValueEventListener(object : ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                for (ds in snapshot.children) {
-                    val message = ds.getValue<Message>()
-                    if (message != null)
-                        messageList.add(message)
-                }
-                adapter.notifyDataSetChanged()
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(activity, "Error loading message", Toast.LENGTH_LONG).show();
-            }
-
-        })
-
-        creatingPointInterest()
-
         binding.apply {
             closeMenuPoint.setOnClickListener {
+                Setting.currentPointId = null
                 menuPoint.visibility = View.INVISIBLE
                 messageSet.setText("")
             }
@@ -171,11 +168,12 @@ class MapFragment : Fragment() {
                 val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
                 val currentDate = sdf.format(Date())
 
-                val mes = Message(message, Setting.ID, currentDate)
-                messageList.add(mes)
-                adapter.notifyDataSetChanged()
+                if(Setting.currentPointId!=null) {
+                    val mes = Message(Setting.currentPointId!!, message, Setting.UserId, currentDate)
+                    DataBase.getDataBase()!!.messageReference.push().setValue(mes)
+                }
 
-                DataBase.getDataBase()!!.messageReference.push().setValue(mes)
+                adapter.notifyDataSetChanged()
             }
             messages.layoutManager = LinearLayoutManager(activity)
             messages.adapter = adapter
@@ -216,58 +214,89 @@ class MapFragment : Fragment() {
         mapManager = MapManager.get(mapView)!!
         mapManager.init()
     }
-    fun creatingPointInterest() {
-        mapManager.apply {
-            val map = mapView.mapWindow.map
+    fun setFilters(_filters: Filters){
+        filters = _filters
+    }
 
-            val points = dataBase!!.pointList
+    fun resetFilter(){
+        filters = null
+    }
+    fun filterApply(){
+        clasterizedCollection.clear()
+        creatingPointInterest()
+    }
+    override fun onStart() {
+        super.onStart()
+        MapKitFactory.getInstance().onStart()
+        mapView.onStart()
+    }
 
-            val collection = map.mapObjects.addCollection()
+    override fun onStop() {
+        mapView.onStop()
+        MapKitFactory.getInstance().onStop()
+        super.onStop()
+    }
 
-            // Add a clusterized collection
-            clasterizedCollection = collection.addClusterizedPlacemarkCollection(clusterListener)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+    companion object {
+        private lateinit var mapFragment: MapFragment
+        fun creatingPointInterest() {
+            mapFragment.apply {
+                mapManager.apply {
+                    val map = mapView.mapWindow.map
 
-            // Add pins to the clusterized collection
+                    val points = dataBase!!.pointList
 
-            val placemarkTypeToImageProvider = mapOf(
-                PlacemarkType.CAFE to ImageProvider.fromResource(
-                    activity,
-                    R.drawable.cafe_ic
-                ),
-                PlacemarkType.ARCHITECTURE to ImageProvider.fromResource(
-                    activity,
-                    R.drawable.landmark_icon
-                ),
-                PlacemarkType.HOTEL to ImageProvider.fromResource(
-                    activity,
-                    R.drawable.ic_hotel
-                ),
-            )
-            points.forEachIndexed { _, point ->
-                if(filters !=null && !filters!!.getsIntoFilter(point.data))
-                else {
-                    val type = point.data.type
-                    val imageProvider = placemarkTypeToImageProvider[type] ?: return
-                    clasterizedCollection.addPlacemark().apply {
-                        geometry = point.point
-                        setIcon(imageProvider, IconStyle().apply {
-                            anchor = PointF(0.5f, 1.0f)
-                            scale = 0.4f
-                        })
-                        // If we want to make placemarks draggable, we should call
-                        // clasterizedCollection.clusterPlacemarks on onMapObjectDragEnd
-                        isDraggable = true
-                        setDragListener(pinDragListener)
-                        // Put any data in MapObject
-                        //val data = PlacemarkUserData("Data_$index","", PlacemarkType.ARCHITECTURE)
-                        //val interestPoint = InterestPoint(data, point)
-                        userData = point.data
-                        addTapListener(placemarkTapListener)
+                    val collection = map.mapObjects.addCollection()
+
+                    // Add a clusterized collection
+                    clasterizedCollection =
+                        collection.addClusterizedPlacemarkCollection(clusterListener)
+
+                    // Add pins to the clusterized collection
+
+                    val placemarkTypeToImageProvider = mapOf(
+                        PlacemarkType.CAFE to ImageProvider.fromResource(
+                            activity,
+                            R.drawable.cafe_ic
+                        ),
+                        PlacemarkType.ARCHITECTURE to ImageProvider.fromResource(
+                            activity,
+                            R.drawable.landmark_icon
+                        ),
+                        PlacemarkType.HOTEL to ImageProvider.fromResource(
+                            activity,
+                            R.drawable.ic_hotel
+                        ),
+                    )
+                    points.forEachIndexed { _, point ->
+                        if (filters != null && !filters!!.getsIntoFilter(point.data))
+                        else {
+                            val type = point.data.type
+                            val imageProvider = placemarkTypeToImageProvider[type] ?: return
+                            clasterizedCollection.addPlacemark().apply {
+                                geometry = point.point
+                                setIcon(imageProvider, IconStyle().apply {
+                                    anchor = PointF(0.5f, 1.0f)
+                                    scale = 0.4f
+                                })
+                                // If we want to make placemarks draggable, we should call
+                                // clasterizedCollection.clusterPlacemarks on onMapObjectDragEnd
+                                isDraggable = true
+                                setDragListener(pinDragListener)
+                                // Put any data in MapObject
+                                //val data = PlacemarkUserData("Data_$index","", PlacemarkType.ARCHITECTURE)
+                                //val interestPoint = InterestPoint(data, point)
+                                userData = point.data
+                                addTapListener(placemarkTapListener)
+                            }
+                        }
                     }
-                }
-            }
 
-            clasterizedCollection.clusterPlacemarks(CLUSTER_RADIUS, CLUSTER_MIN_ZOOM)
+                    clasterizedCollection.clusterPlacemarks(CLUSTER_RADIUS, CLUSTER_MIN_ZOOM)
 
 //                val interestPoints = arrayListOf<InterestPoint>(
 //                    InterestPoint(
@@ -288,34 +317,8 @@ class MapFragment : Fragment() {
 //                    interestPoint.data.id=ref.key.toString()
 //                    ref.setValue(interestPoint)
 //                }
+                }
+            }
         }
-    }
-
-    fun setFilters(_filters: Filters){
-        filters = _filters
-    }
-    fun resetFilter(){
-        filters = null
-    }
-    fun filterApply(){
-        clasterizedCollection.clear()
-        creatingPointInterest()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        MapKitFactory.getInstance().onStart()
-        mapView.onStart()
-    }
-
-    override fun onStop() {
-        mapView.onStop()
-        MapKitFactory.getInstance().onStop()
-        super.onStop()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

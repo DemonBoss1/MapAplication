@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.Recycler
 import com.example.mapaplication.databinding.MessageLayoutBinding
 import com.google.firebase.database.getValue
 import com.squareup.picasso.Picasso
@@ -15,7 +14,7 @@ class MessageAdapter(private val messageList: ArrayList<Message>): RecyclerView.
         fun bind(message: Message) = with(binding){
                 DataBase.getDataBase()!!
                     .userReference
-                    .child(Setting.ID)
+                    .child(Setting.UserId)
                     .get().addOnCompleteListener {
                         val user: User? = it.result.getValue<User>()
                         if (user != null)

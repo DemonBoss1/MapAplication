@@ -4,17 +4,13 @@ import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
-import com.google.android.gms.tasks.Continuation
-import com.google.android.gms.tasks.OnSuccessListener
-import com.google.android.gms.tasks.Task
+import com.example.mapaplication.ui.map.MapFragment
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageTask
-import com.google.firebase.storage.UploadTask
 import java.io.ByteArrayOutputStream
 
 class DataBase private constructor() {
@@ -49,7 +45,7 @@ class DataBase private constructor() {
                         if (point != null)
                             pointList.add(point)
                     }
-                    if(isWait) MapManager.creatingPointInterest()
+                    if(isWait) MapFragment.creatingPointInterest()
                     isWait = false
                 }
                 override fun onCancelled(error: DatabaseError) {}
@@ -75,14 +71,14 @@ class DataBase private constructor() {
             val baos = ByteArrayOutputStream()
             bitMap.compress(Bitmap.CompressFormat.PNG, 20, baos)
             val byteArray = baos.toByteArray()
-            val mRef = dataBase?.storageRef?.child(Setting.ID)
+            val mRef = dataBase?.storageRef?.child(Setting.UserId)
             val up = mRef?.putBytes(byteArray)
             up?.addOnCompleteListener {
                 var imageUri: Uri
                 mRef.downloadUrl.addOnSuccessListener {
                     imageUri = it
-                    val user = User(Setting.ID, Setting.username, imageUri.toString())
-                    dataBase?.userReference?.child(Setting.ID)?.setValue(user)
+                    val user = User(Setting.UserId, Setting.username, imageUri.toString())
+                    dataBase?.userReference?.child(Setting.UserId)?.setValue(user)
                 }
             }
 
