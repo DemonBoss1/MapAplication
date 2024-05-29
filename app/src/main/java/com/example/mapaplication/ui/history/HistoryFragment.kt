@@ -1,17 +1,14 @@
 package com.example.mapaplication.ui.history
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mapaplication.databinding.FragmentHistoryBinding
 import com.example.mapaplication.ui.map.InterestPoint
-import com.example.mapaplication.ui.map.Message
-import com.example.mapaplication.ui.map.MessageAdapter
 
 class HistoryFragment : Fragment() {
 
@@ -20,6 +17,12 @@ class HistoryFragment : Fragment() {
 
     val historyList = ArrayList<InterestPoint>()
     val adapter = HistoryAdapter(historyList)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        historyFragment = this
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,11 +35,21 @@ class HistoryFragment : Fragment() {
         binding.historyList.layoutManager = LinearLayoutManager(activity)
         binding.historyList.adapter = adapter
 
+        adapter.notifyDataSetChanged()
+
         return root
     }
 
     override fun onDestroyView() {
             super.onDestroyView()
             _binding = null
+    }
+
+    companion object {
+        private lateinit var historyFragment: HistoryFragment
+
+        fun notifyDataSetChanged(){
+            //historyFragment.adapter.notifyDataSetChanged()
+        }
     }
 }

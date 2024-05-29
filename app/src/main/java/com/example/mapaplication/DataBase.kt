@@ -72,14 +72,14 @@ class DataBase private constructor() {
             val baos = ByteArrayOutputStream()
             bitMap.compress(Bitmap.CompressFormat.PNG, 20, baos)
             val byteArray = baos.toByteArray()
-            val mRef = dataBase?.storageRef?.child(Setting.UserId)
+            val mRef = dataBase?.storageRef?.child(SaveData.UserId)
             val up = mRef?.putBytes(byteArray)
             up?.addOnCompleteListener {
                 var imageUri: Uri
                 mRef.downloadUrl.addOnSuccessListener {
                     imageUri = it
-                    val user = User(Setting.UserId, Setting.username, imageUri.toString())
-                    dataBase?.userReference?.child(Setting.UserId)?.setValue(user)
+                    val user = User(SaveData.UserId, SaveData.username, imageUri.toString())
+                    dataBase?.userReference?.child(SaveData.UserId)?.setValue(user)
                 }
             }
 

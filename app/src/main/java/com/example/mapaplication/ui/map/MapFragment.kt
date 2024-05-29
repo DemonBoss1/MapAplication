@@ -11,8 +11,9 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mapaplication.DataBase
 import com.example.mapaplication.R
-import com.example.mapaplication.Setting
+import com.example.mapaplication.SaveData
 import com.example.mapaplication.databinding.FragmentMapBinding
+import com.example.mapaplication.ui.history.HistoryFragment
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -85,7 +86,9 @@ class MapFragment : Fragment() {
 
         val userData = mapObject.userData  as PlacemarkUserData
 
-        Setting.currentPointId = userData.id
+        SaveData.currentPointId = userData.id
+        SaveData.historyPoints.add(InterestPoint(userData, point))
+        HistoryFragment.notifyDataSetChanged()
 
         binding.apply {
             menuPoint.visibility = View.VISIBLE
@@ -114,7 +117,7 @@ class MapFragment : Fragment() {
                 messageList.clear()
                 for (ds in snapshot.children) {
                     val message = ds.getValue<Message>()
-                    if (message != null && message.interestPointId == Setting.currentPointId)
+                    if (message != null && message.interestPointId == SaveData.currentPointId)
                         messageList.add(message)
                 }
                 adapter.notifyDataSetChanged()
@@ -138,10 +141,12 @@ class MapFragment : Fragment() {
 
         _binding = FragmentMapBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
-        init()
-
         return root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        init()
     }
 
     private fun init(){
@@ -150,7 +155,7 @@ class MapFragment : Fragment() {
 
         binding.apply {
             closeMenuPoint.setOnClickListener {
-                Setting.currentPointId = null
+                SaveData.currentPointId = null
                 menuPoint.visibility = View.INVISIBLE
                 messageSet.setText("")
             }
@@ -161,8 +166,8 @@ class MapFragment : Fragment() {
                 val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
                 val currentDate = sdf.format(Date())
 
-                if(Setting.currentPointId!=null) {
-                    val mes = Message(Setting.currentPointId!!, message, Setting.UserId, currentDate)
+                if(SaveData.currentPointId!=null) {
+                    val mes = Message(SaveData.currentPointId!!, message, SaveData.UserId, currentDate)
                     DataBase.getDataBase()!!.messageReference.push().setValue(mes)
                 }
 
@@ -202,6 +207,7 @@ class MapFragment : Fragment() {
                 filterMenu.visibility = View.INVISIBLE
 
             }
+
         }
 
         mapManager = MapManager.get(mapView)!!
@@ -236,6 +242,7 @@ class MapFragment : Fragment() {
     }
     companion object {
         private lateinit var mapFragment: MapFragment
+        fun newInstance() = MapFragment()
         fun creatingPointInterest() {
             mapFragment.apply {
                 mapManager.apply {

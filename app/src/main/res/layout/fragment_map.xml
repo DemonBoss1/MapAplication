@@ -10,9 +10,7 @@
     <com.yandex.mapkit.mapview.MapView
         android:id="@+id/mapview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-
-    </com.yandex.mapkit.mapview.MapView>
+        android:layout_height="match_parent" />
 
     <Button
         android:id="@+id/filters_button"

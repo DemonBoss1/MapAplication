@@ -1,36 +1,41 @@
 package com.example.mapaplication.ui.history
 
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mapaplication.DataBase
-import com.example.mapaplication.Setting
+import com.example.mapaplication.R
+import com.example.mapaplication.SaveData
 import com.example.mapaplication.User
+import com.example.mapaplication.databinding.HistoryItemBinding
 import com.example.mapaplication.databinding.MessageLayoutBinding
 import com.example.mapaplication.ui.map.InterestPoint
 import com.example.mapaplication.ui.map.Message
-import com.example.mapaplication.ui.map.MessageAdapter
 import com.google.firebase.database.getValue
 import com.squareup.picasso.Picasso
 
 class HistoryAdapter(historyList: ArrayList<InterestPoint>): RecyclerView.Adapter<HistoryAdapter.HistoryHolder>()  {
+    private val historyList = SaveData.historyPoints
     class HistoryHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val binding = MessageLayoutBinding.bind(itemView)
-        fun bind(message: Message) = with(binding){
+        val binding = HistoryItemBinding.bind(itemView)
+        fun bind(point: InterestPoint) = with(binding){
+            historyName.text = point.data.title
 
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryHolder {
-        TODO("Not yet implemented")
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.history_item, parent, false)
+        return HistoryHolder(view)
     }
 
     override fun getItemCount(): Int {
-        TODO("Not yet implemented")
+        return historyList.size
     }
 
     override fun onBindViewHolder(holder: HistoryHolder, position: Int) {
-        TODO("Not yet implemented")
+        holder.bind(historyList[position])
     }
 
 }
