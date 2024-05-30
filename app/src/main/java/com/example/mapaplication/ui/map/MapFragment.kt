@@ -43,11 +43,13 @@ class MapFragment : Fragment() {
     private var filters: Filters? = null
 
     private val dataBase = DataBase.getDataBase()
-    private var _binding: FragmentMapBinding? = null
+    private lateinit var _binding: FragmentMapBinding
     val binding get() = _binding!!
 
     val messageList = ArrayList<Message>()
     val adapter = MessageAdapter(messageList)
+
+    var currentInterestPoint: InterestPoint? = null
 
     private val pinDragListener = object : MapObjectDragListener {
         override fun onMapObjectDragStart(p0: MapObject) {
@@ -87,8 +89,7 @@ class MapFragment : Fragment() {
         val userData = mapObject.userData  as PlacemarkUserData
 
         SaveData.currentPointId = userData.id
-        SaveData.historyPoints.add(InterestPoint(userData, point))
-        HistoryFragment.notifyDataSetChanged()
+        currentInterestPoint = InterestPoint(userData, point)
 
         binding.apply {
             menuPoint.visibility = View.VISIBLE
@@ -155,23 +156,33 @@ class MapFragment : Fragment() {
 
         binding.apply {
             closeMenuPoint.setOnClickListener {
+                currentInterestPoint = null
                 SaveData.currentPointId = null
                 menuPoint.visibility = View.INVISIBLE
                 messageSet.setText("")
             }
             sentMessage.setOnClickListener {
-                val message = messageSet.text.toString()
-                messageSet.text.clear()
+                if(messageSet.text.isNotEmpty()) {
+                    val message = messageSet.text.toString()
+                    messageSet.text.clear()
 
-                val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
-                val currentDate = sdf.format(Date())
+                    val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
+                    val currentDate = sdf.format(Date())
 
-                if(SaveData.currentPointId!=null) {
-                    val mes = Message(SaveData.currentPointId!!, message, SaveData.UserId, currentDate)
-                    DataBase.getDataBase()!!.messageReference.push().setValue(mes)
+                    if (SaveData.currentPointId != null) {
+                        val mes = Message(
+                            SaveData.currentPointId!!,
+                            message,
+                            SaveData.UserId,
+                            currentDate
+                        )
+                        DataBase.getDataBase()!!.messageReference.push().setValue(mes)
+                    }
+
+                    adapter.notifyDataSetChanged()
                 }
-
-                adapter.notifyDataSetChanged()
+                SaveData.historyPoints.add(currentInterestPoint!!)
+                HistoryFragment.notifyDataSetChanged()
             }
             messages.layoutManager = LinearLayoutManager(activity)
             messages.adapter = adapter
@@ -216,12 +227,10 @@ class MapFragment : Fragment() {
     fun setFilters(_filters: Filters){
         filters = _filters
     }
-
     fun resetFilter(){
         filters = null
     }
     fun filterApply(){
-        clasterizedCollection.clear()
         creatingPointInterest()
     }
     override fun onStart() {
@@ -229,16 +238,13 @@ class MapFragment : Fragment() {
         MapKitFactory.getInstance().onStart()
         mapView.onStart()
     }
-
     override fun onStop() {
         mapView.onStop()
         MapKitFactory.getInstance().onStop()
         super.onStop()
     }
-
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
     }
     companion object {
         private lateinit var mapFragment: MapFragment

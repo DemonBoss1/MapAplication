@@ -35,7 +35,7 @@ class HistoryFragment : Fragment() {
         binding.historyList.layoutManager = LinearLayoutManager(activity)
         binding.historyList.adapter = adapter
 
-        adapter.notifyDataSetChanged()
+        //adapter.notifyDataSetChanged()
 
         return root
     }
@@ -46,10 +46,10 @@ class HistoryFragment : Fragment() {
     }
 
     companion object {
-        private lateinit var historyFragment: HistoryFragment
+        private var historyFragment: HistoryFragment? = null
 
         fun notifyDataSetChanged(){
-            //historyFragment.adapter.notifyDataSetChanged()
+            historyFragment?.adapter?.notifyDataSetChanged()
         }
     }
 }
