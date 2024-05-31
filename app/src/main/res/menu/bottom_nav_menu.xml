@@ -2,6 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/navigation_filter"
+        android:icon="@drawable/filter"
+        android:title="@string/title_filter"/>
+    <item
         android:id="@+id/navigation_map"
         android:icon="@drawable/ic_map"
         android:title="@string/title_map"/>

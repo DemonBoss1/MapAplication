@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.core.view.size
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mapaplication.databinding.ActivityMainBinding
@@ -207,13 +208,8 @@ class MainActivity : AppCompatActivity() {
             messages.layoutManager = LinearLayoutManager(this@MainActivity)
             messages.adapter = adapter
 
-            filtersButton.setOnClickListener {
-                filtersButton.visibility = View.INVISIBLE
-                filterMenu.visibility = View.VISIBLE
-            }
             closeMenuFilter.setOnClickListener {
-                filtersButton.visibility = View.VISIBLE
-                filterMenu.visibility = View.INVISIBLE
+                drawer.closeDrawer(GravityCompat.START)
 
             }
             filterReset.setOnClickListener{
@@ -234,15 +230,16 @@ class MainActivity : AppCompatActivity() {
 
                 filterApply()
 
-                filtersButton.visibility = View.VISIBLE
-                filterMenu.visibility = View.INVISIBLE
-
             }
-
+            navView.selectedItemId = R.id.navigation_map
             navView.setOnItemSelectedListener {
                 when(it.itemId){
+                    R.id.navigation_filter -> {
+                        drawer.closeDrawers()
+                        drawer.openDrawer(GravityCompat.START)
+                    }
                     R.id.navigation_map -> {
-
+                        drawer.closeDrawers()
                     }
                     R.id.navigation_history -> {
 
