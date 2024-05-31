@@ -244,7 +244,8 @@ class MainActivity : AppCompatActivity() {
                         drawer.closeDrawers()
                     }
                     R.id.navigation_history -> {
-
+                        drawer.closeDrawers()
+                        drawer.openDrawer(GravityCompat.END)
                     }
                 }
                 true
