@@ -13,6 +13,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.core.view.size
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mapaplication.databinding.ActivityMainBinding
 import com.example.mapaplication.ui.history.HistoryFragment
@@ -210,7 +211,7 @@ class MainActivity : AppCompatActivity() {
 
             closeMenuFilter.setOnClickListener {
                 drawer.closeDrawer(GravityCompat.START)
-
+                navView.selectedItemId = R.id.navigation_map
             }
             filterReset.setOnClickListener{
                 checkBoxCafe.isChecked = false
@@ -231,6 +232,7 @@ class MainActivity : AppCompatActivity() {
                 filterApply()
 
             }
+
             navView.selectedItemId = R.id.navigation_map
             navView.setOnItemSelectedListener {
                 when(it.itemId){
