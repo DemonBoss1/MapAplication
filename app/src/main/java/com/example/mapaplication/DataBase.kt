@@ -5,7 +5,6 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import com.example.mapaplication.ui.map.InterestPoint
-import com.example.mapaplication.ui.map.MapFragment
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -46,7 +45,7 @@ class DataBase private constructor() {
                         if (point != null)
                             pointList.add(point)
                     }
-                    if(isWait) MapFragment.creatingPointInterest()
+                    if(isWait) MainActivity.creatingPointInterest()
                     isWait = false
                 }
                 override fun onCancelled(error: DatabaseError) {}

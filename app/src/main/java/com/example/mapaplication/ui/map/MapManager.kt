@@ -52,6 +52,9 @@ class MapManager private constructor(private val mapView: MapView) {
                 isFocusRect = true
             }
         }
+        fun movePosition(cameraPosition: CameraPosition) {
+            mapManager?.mapView?.mapWindow?.map?.move(cameraPosition)
+        }
 
 
     }

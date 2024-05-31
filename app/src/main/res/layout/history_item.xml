@@ -14,7 +14,7 @@
         android:text="TextView" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/moving_to_point_interest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="0"
