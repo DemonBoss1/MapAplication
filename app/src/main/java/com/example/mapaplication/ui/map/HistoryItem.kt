@@ -4,5 +4,5 @@ import com.yandex.mapkit.geometry.Point
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class HistoryItem(val point: PointForMap, val date: String, val nameHistoryPoint: String, val message: String?) {
+data class HistoryItem(val point: PointForHistory, val date: String, val nameHistoryPoint: String, val message: String?) {
 }

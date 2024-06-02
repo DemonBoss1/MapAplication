@@ -1,5 +1,6 @@
 package com.example.mapaplication.ui.history
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ import com.example.mapaplication.ui.map.MapManager
 import com.example.mapaplication.ui.map.Message
 import com.google.firebase.database.getValue
 import com.squareup.picasso.Picasso
+import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.map.CameraPosition
 
 class HistoryAdapter(historyList: ArrayList<InterestPoint>): RecyclerView.Adapter<HistoryAdapter.HistoryHolder>()  {
@@ -27,7 +29,7 @@ class HistoryAdapter(historyList: ArrayList<InterestPoint>): RecyclerView.Adapte
             historyName.text = item.nameHistoryPoint
             dateTimeHistory.text = item.date
             movingToPointInterest.setOnClickListener {
-                MapManager.movePosition(CameraPosition(item.point, 17.0f, 0f, 0f))
+                MapManager.movePosition(CameraPosition(Point(item.point.latitude, item.point.longitude), 17.0f, 0f, 0f))
             }
 
         }

@@ -25,6 +25,7 @@ import com.example.mapaplication.ui.map.Message
 import com.example.mapaplication.ui.map.MessageAdapter
 import com.example.mapaplication.ui.map.PlacemarkType
 import com.example.mapaplication.ui.map.PlacemarkUserData
+import com.example.mapaplication.ui.map.PointForHistory
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -167,7 +168,6 @@ class MainActivity : AppCompatActivity() {
         val code = SaveData.pref.getString(SaveData.HistoryKeys, null)
         if (code != null) {
             val list : ArrayList<HistoryItem> = Json.decodeFromString<ArrayList<HistoryItem>>(code)
-            Log.e("debugBegin", list[0].toString())
             SaveData.historyPoints.addAll(list)
         }
 
@@ -212,7 +212,7 @@ class MainActivity : AppCompatActivity() {
                     }
                     adapter.notifyDataSetChanged()
                 }
-                val historyItem = HistoryItem(currentInterestPoint!!.point, currentDate, currentInterestPoint!!.data.title, message)
+                val historyItem = HistoryItem(PointForHistory(currentInterestPoint!!.point.latitude, currentInterestPoint!!.point.longitude), currentDate, currentInterestPoint!!.data.title, message)
                 SaveData.historyPoints.add(historyItem)
                 HistoryFragment.notifyDataSetChanged()
             }

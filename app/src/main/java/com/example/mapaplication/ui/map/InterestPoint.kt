@@ -5,19 +5,15 @@ import android.os.Parcelable
 import com.yandex.mapkit.geometry.Point
 import kotlinx.serialization.Serializable
 
-@Serializable
 class InterestPoint() {
     lateinit var data: PlacemarkUserData
-    lateinit var point: PointForMap
+    lateinit var point: Point
 
     constructor(_data: PlacemarkUserData, _point: Point) : this() {
         data = _data
-        point = PointForMap(_point.latitude, _point.longitude)
+        point = _point
     }
 
 }
 @Serializable
-class PointForMap:Point{
-    constructor() : super()
-    constructor(latitude : Double, longitude  : Double) : super(latitude, longitude)
-}
+data class PointForHistory(val latitude : Double, val longitude : Double)
