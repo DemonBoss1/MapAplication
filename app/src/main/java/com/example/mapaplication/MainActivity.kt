@@ -6,14 +6,13 @@ import android.content.Intent
 import android.graphics.PointF
 import android.icu.text.SimpleDateFormat
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
-import androidx.core.view.size
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mapaplication.databinding.ActivityMainBinding
 import com.example.mapaplication.ui.history.HistoryFragment
@@ -42,6 +41,8 @@ import com.yandex.mapkit.map.MapObjectTapListener
 import com.yandex.mapkit.mapview.MapView
 import com.yandex.runtime.image.ImageProvider
 import com.yandex.runtime.ui_view.ViewProvider
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import java.util.Date
 
 private const val CLUSTER_RADIUS = 60.0
@@ -162,6 +163,15 @@ class MainActivity : AppCompatActivity() {
 
         recordingUserName()
 
+        val code = SaveData.pref.getString(SaveData.HistoryKeys, null)
+        if (code != null) {
+            val list : ArrayList<InterestPoint> = Json.decodeFromString<ArrayList<InterestPoint>>(code)
+            Log.e("debugBegin", list[0].toString())
+            if (list != null) {
+                SaveData.historyPoints.addAll(list)
+            }
+        }
+
         init()
     }
 
@@ -203,7 +213,7 @@ class MainActivity : AppCompatActivity() {
 
                     adapter.notifyDataSetChanged()
                 }
-                SaveData.historyPoints.add(currentInterestPoint!!)
+                SaveData.historyPoints?.add(currentInterestPoint!!)
                 HistoryFragment.notifyDataSetChanged()
             }
             messages.layoutManager = LinearLayoutManager(this@MainActivity)
@@ -299,7 +309,17 @@ class MainActivity : AppCompatActivity() {
     override fun onStop() {
         mapView.onStop()
         MapKitFactory.getInstance().onStop()
+
+        val edit = SaveData.pref.edit()
+        val code = Json.encodeToString<ArrayList<InterestPoint>>(SaveData.historyPoints)
+        Log.e("debugEnd", code.toString())
+        edit.putString(SaveData.HistoryKeys,code).apply()
+
         super.onStop()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
     companion object{
         private var mainActivity: MainActivity? = null

@@ -2,6 +2,8 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'com.google.gms.google-services'
+
+    id "org.jetbrains.kotlin.plugin.serialization" version "1.6.10"
 }
 
 android {
@@ -41,6 +43,7 @@ dependencies {
     implementation 'com.yandex.android:maps.mobile:4.5.1-lite'
     implementation 'com.squareup.picasso:picasso:2.8'
     implementation 'androidx.viewpager2:viewpager2:1.1.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3'
 
     implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'

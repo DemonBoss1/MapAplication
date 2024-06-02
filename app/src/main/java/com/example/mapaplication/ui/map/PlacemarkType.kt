@@ -1,11 +1,13 @@
 package com.example.mapaplication.ui.map
 
+import kotlinx.serialization.Serializable
+
 enum class PlacemarkType {
     ARCHITECTURE,
     CAFE,
     HOTEL
 }
-
+@Serializable
 class PlacemarkUserData() {
     lateinit var id: String
     lateinit var title: String
