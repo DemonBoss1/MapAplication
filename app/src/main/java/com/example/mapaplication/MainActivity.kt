@@ -18,6 +18,7 @@ import com.example.mapaplication.databinding.ActivityMainBinding
 import com.example.mapaplication.ui.history.HistoryFragment
 import com.example.mapaplication.ui.map.ClusterView
 import com.example.mapaplication.ui.map.Filters
+import com.example.mapaplication.ui.map.HistoryItem
 import com.example.mapaplication.ui.map.InterestPoint
 import com.example.mapaplication.ui.map.MapManager
 import com.example.mapaplication.ui.map.Message
@@ -165,11 +166,9 @@ class MainActivity : AppCompatActivity() {
 
         val code = SaveData.pref.getString(SaveData.HistoryKeys, null)
         if (code != null) {
-            val list : ArrayList<InterestPoint> = Json.decodeFromString<ArrayList<InterestPoint>>(code)
+            val list : ArrayList<HistoryItem> = Json.decodeFromString<ArrayList<HistoryItem>>(code)
             Log.e("debugBegin", list[0].toString())
-            if (list != null) {
-                SaveData.historyPoints.addAll(list)
-            }
+            SaveData.historyPoints.addAll(list)
         }
 
         init()
@@ -194,12 +193,13 @@ class MainActivity : AppCompatActivity() {
                 messageSet.setText("")
             }
             sentMessage.setOnClickListener {
-                if(messageSet.text.isNotEmpty()) {
-                    val message = messageSet.text.toString()
-                    messageSet.text.clear()
+                val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
+                val currentDate = sdf.format(Date())
 
-                    val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
-                    val currentDate = sdf.format(Date())
+                var message: String? = null
+                if(messageSet.text.isNotEmpty()) {
+                    message = messageSet.text.toString()
+                    messageSet.text.clear()
 
                     if (SaveData.currentPointId != null) {
                         val mes = Message(
@@ -210,10 +210,10 @@ class MainActivity : AppCompatActivity() {
                         )
                         DataBase.getDataBase()!!.messageReference.push().setValue(mes)
                     }
-
                     adapter.notifyDataSetChanged()
                 }
-                SaveData.historyPoints?.add(currentInterestPoint!!)
+                val historyItem = HistoryItem(currentInterestPoint!!.point, currentDate, currentInterestPoint!!.data.title, message)
+                SaveData.historyPoints.add(historyItem)
                 HistoryFragment.notifyDataSetChanged()
             }
             messages.layoutManager = LinearLayoutManager(this@MainActivity)
@@ -311,7 +311,7 @@ class MainActivity : AppCompatActivity() {
         MapKitFactory.getInstance().onStop()
 
         val edit = SaveData.pref.edit()
-        val code = Json.encodeToString<ArrayList<InterestPoint>>(SaveData.historyPoints)
+        val code = Json.encodeToString<ArrayList<HistoryItem>>(SaveData.historyPoints)
         Log.e("debugEnd", code.toString())
         edit.putString(SaveData.HistoryKeys,code).apply()
 

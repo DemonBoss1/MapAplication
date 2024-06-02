@@ -11,6 +11,7 @@ import com.example.mapaplication.SaveData
 import com.example.mapaplication.User
 import com.example.mapaplication.databinding.HistoryItemBinding
 import com.example.mapaplication.databinding.MessageLayoutBinding
+import com.example.mapaplication.ui.map.HistoryItem
 import com.example.mapaplication.ui.map.InterestPoint
 import com.example.mapaplication.ui.map.MapManager
 import com.example.mapaplication.ui.map.Message
@@ -22,10 +23,11 @@ class HistoryAdapter(historyList: ArrayList<InterestPoint>): RecyclerView.Adapte
     private val historyList = SaveData.historyPoints
     class HistoryHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val binding = HistoryItemBinding.bind(itemView)
-        fun bind(point: InterestPoint) = with(binding){
-            historyName.text = point.data.title
+        fun bind(item: HistoryItem) = with(binding){
+            historyName.text = item.nameHistoryPoint
+            dateTimeHistory.text = item.date
             movingToPointInterest.setOnClickListener {
-                MapManager.movePosition(CameraPosition(point.point, 17.0f, 0f, 0f))
+                MapManager.movePosition(CameraPosition(item.point, 17.0f, 0f, 0f))
             }
 
         }
