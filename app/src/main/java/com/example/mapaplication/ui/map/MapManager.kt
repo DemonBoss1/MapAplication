@@ -46,8 +46,12 @@ class MapManager private constructor(private val mapView: MapView) {
                 )
             }
         }
-        fun movePosition(cameraPosition: CameraPosition) {
-            mapManager?.mapView?.mapWindow?.map?.move(cameraPosition)
+        fun movePosition(point: Point, zoom: Float) {
+            val cameraPosition = mapManager!!.mapView.mapWindow.map.cameraPosition
+            val azimuth = cameraPosition.azimuth
+            val tilt = cameraPosition.tilt
+            val newCameraPosition = CameraPosition(point, zoom, azimuth, tilt)
+            mapManager?.mapView?.mapWindow?.map?.move(newCameraPosition)
         }
 
 

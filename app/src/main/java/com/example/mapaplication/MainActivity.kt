@@ -30,6 +30,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.getValue
+import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.map.CameraPosition
@@ -78,6 +79,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val clusterTapListener = ClusterTapListener {
+        val cameraPosition = mapView.mapWindow.map.cameraPosition
+        val zoom = cameraPosition.zoom
+        val azimuth = cameraPosition.azimuth
+        val tilt = cameraPosition.tilt
+        val position = CameraPosition(
+            /* target = */ it.appearance.geometry,
+            /* zoom = */ zoom + 1,
+            /* azimuth = */ azimuth,
+            /* tilt = */ tilt
+        )
+        mapView.mapWindow.map.move(
+            position,
+            Animation(Animation.Type.LINEAR, 0.5f),
+            null)
+
         true
     }
     private val clusterListener = ClusterListener { cluster ->

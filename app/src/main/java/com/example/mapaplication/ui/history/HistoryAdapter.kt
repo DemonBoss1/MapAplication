@@ -29,7 +29,7 @@ class HistoryAdapter(historyList: ArrayList<InterestPoint>): RecyclerView.Adapte
             historyName.text = item.nameHistoryPoint
             dateTimeHistory.text = item.date
             movingToPointInterest.setOnClickListener {
-                MapManager.movePosition(CameraPosition(Point(item.point.latitude, item.point.longitude), 17.0f, 0f, 0f))
+                MapManager.movePosition(Point(item.point.latitude, item.point.longitude), 17.0f)
                 MainActivity.closeMenus()
             }
 
