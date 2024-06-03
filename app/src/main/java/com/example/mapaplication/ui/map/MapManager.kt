@@ -9,8 +9,6 @@ import com.yandex.mapkit.mapview.MapView
 
 class MapManager private constructor(private val mapView: MapView) {
 
-    var isFocusRect = false
-
     fun init(){
         val map = mapView.mapWindow.map
 
@@ -36,9 +34,6 @@ class MapManager private constructor(private val mapView: MapView) {
                 mapManager = MapManager(mapView)
             return mapManager
         }
-        fun getFocusRect(): Boolean {
-            return mapManager?.isFocusRect!!
-        }
 
         fun updateFocusInfo(bottomPadding: Int){
             mapManager?.apply {
@@ -49,7 +44,6 @@ class MapManager private constructor(private val mapView: MapView) {
                         mapView.mapWindow.height().toFloat() - bottomPadding,
                     )
                 )
-                isFocusRect = true
             }
         }
         fun movePosition(cameraPosition: CameraPosition) {

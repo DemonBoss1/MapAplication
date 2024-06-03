@@ -111,9 +111,7 @@ class MainActivity : AppCompatActivity() {
             descriptionMenuPoint.text = userData.description
         }
 
-        if (!MapManager.getFocusRect()) {
-            MapManager.updateFocusInfo(binding.menuPoint.measuredHeight)
-        }
+        MapManager.updateFocusInfo(binding.menuPoint.measuredHeight)
 
         val cameraPosition = mapView.mapWindow.map.cameraPosition
         val zoom = cameraPosition.zoom
@@ -190,6 +188,7 @@ class MainActivity : AppCompatActivity() {
                 currentInterestPoint = null
                 SaveData.currentPointId = null
                 menuPoint.visibility = View.INVISIBLE
+                MapManager.updateFocusInfo(0)
                 messageSet.setText("")
             }
             sentMessage.setOnClickListener {
@@ -325,7 +324,7 @@ class MainActivity : AppCompatActivity() {
         private var mainActivity: MainActivity? = null
 
         fun creatingPointInterest() {
-            MainActivity.mainActivity?.apply {
+            mainActivity?.apply {
                 mapManager.apply {
                     val map = mapView.mapWindow.map
 
@@ -403,6 +402,9 @@ class MainActivity : AppCompatActivity() {
 //                }
                 }
             }
+        }
+        fun closeMenus(){
+            mainActivity!!.binding.navView.selectedItemId = R.id.navigation_map
         }
     }
 }
