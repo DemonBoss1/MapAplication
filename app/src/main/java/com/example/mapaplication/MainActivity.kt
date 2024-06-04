@@ -238,6 +238,11 @@ class MainActivity : AppCompatActivity() {
                 drawer.closeDrawer(GravityCompat.START)
                 navView.selectedItemId = R.id.navigation_map
             }
+            filterSelectAll.setOnClickListener {
+                checkBoxCafe.isChecked = true
+                checkBoxHotel.isChecked = true
+                checkBoxLandmark.isChecked = true
+            }
             filterReset.setOnClickListener{
                 checkBoxCafe.isChecked = false
                 checkBoxHotel.isChecked = false
