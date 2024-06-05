@@ -21,7 +21,7 @@ class DataBase private constructor() {
     private val MESSAGE_KEY = "Message"
 
     private val firebaseDatabase: FirebaseDatabase = FirebaseDatabase.getInstance("https://the-secret-of-cities-default-rtdb.europe-west1.firebasedatabase.app")
-    private val pointReference: DatabaseReference = firebaseDatabase.getReference(POINT_KEY)
+    val pointReference: DatabaseReference = firebaseDatabase.getReference(POINT_KEY)
     val userReference: DatabaseReference = firebaseDatabase.getReference(USER_KEY)
     val messageReference: DatabaseReference = firebaseDatabase.getReference(MESSAGE_KEY)
 

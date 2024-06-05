@@ -1,14 +1,20 @@
 package com.example.mapaplication.ui.map
 
+import android.os.Environment
+import android.util.Log
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.ScreenPoint
 import com.yandex.mapkit.ScreenRect
 import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.map.CameraPosition
 import com.yandex.mapkit.mapview.MapView
+import java.io.File
+import java.io.FileInputStream
+
 
 class MapManager private constructor(private val mapView: MapView) {
 
+    fun readFileAsLinesUsingUseLines(fileName: String): List<String> = File(fileName).useLines { it.toList() }
     fun init(){
         val map = mapView.mapWindow.map
 
@@ -22,6 +28,15 @@ class MapManager private constructor(private val mapView: MapView) {
             Animation(Animation.Type.LINEAR, 1f),
             null
         )
+        Log.e("file", Environment.getExternalStorageDirectory().path)
+        //val fin = File(Environment.getExternalStorageDirectory().path + "/" + File.separator + "Point.txt")
+        //fin.createNewFile()
+        //val stringList = readFileAsLinesUsingUseLines("Points.json")
+//        Log.e("point",stringList[0])
+//        Log.e("point",stringList[1])
+//        Log.e("point",stringList[2])
+//        Log.e("point",stringList[3])
+//        Log.e("point",stringList[4])
 
     }
 
