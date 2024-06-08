@@ -3,16 +3,20 @@ package com.example.mapaplication
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.PointF
+import android.graphics.PorterDuff
 import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup.MarginLayoutParams
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.core.view.setMargins
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mapaplication.databinding.ActivityMainBinding
 import com.example.mapaplication.ui.history.HistoryFragment
@@ -61,6 +65,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var clasterizedCollection: ClusterizedPlacemarkCollection
     private var filters: Filters? = null
 
+    val reviewList = arrayListOf(false, false, false, false, false, false, false, false, false)
     val messageList = ArrayList<Message>()
     val adapter = MessageAdapter(messageList)
 
@@ -190,6 +195,118 @@ class MainActivity : AppCompatActivity() {
         //assets.open("Point.json")
     }
 
+    fun deactivateImage(){
+        binding.apply {
+            imageView.setBackgroundColor(Color.LTGRAY)
+            imageView2.setBackgroundColor(Color.LTGRAY)
+            imageView3.setBackgroundColor(Color.LTGRAY)
+            imageView4.setBackgroundColor(Color.LTGRAY)
+            imageView5.setBackgroundColor(Color.LTGRAY)
+            imageView6.setBackgroundColor(Color.LTGRAY)
+            imageView7.setBackgroundColor(Color.LTGRAY)
+            imageView8.setBackgroundColor(Color.LTGRAY)
+            imageView9.setBackgroundColor(Color.LTGRAY)
+        }
+        for (i in 0..<reviewList.size)
+            reviewList[i] = false
+    }
+
+    fun initImage(){
+        deactivateImage()
+        binding.apply {
+            imageView.setOnClickListener {
+                if(reviewList[0]){
+                    it.setBackgroundColor(Color.LTGRAY)
+                    reviewList[0] = false
+                }
+                else{
+                    it.setBackgroundColor(Color.WHITE)
+                    reviewList[0] = true
+                }
+            }
+            imageView2.setOnClickListener {
+                if(reviewList[1]){
+                    it.setBackgroundColor(Color.LTGRAY)
+                    reviewList[1] = false
+                }
+                else{
+                    it.setBackgroundColor(Color.WHITE)
+                    reviewList[1] = true
+                }
+            }
+            imageView3.setOnClickListener {
+                if(reviewList[2]){
+                    it.setBackgroundColor(Color.LTGRAY)
+                    reviewList[2] = false
+                }
+                else{
+                    it.setBackgroundColor(Color.WHITE)
+                    reviewList[2] = true
+                }
+            }
+            imageView4.setOnClickListener {
+                if(reviewList[3]){
+                    it.setBackgroundColor(Color.LTGRAY)
+                    reviewList[3] = false
+                }
+                else{
+                    it.setBackgroundColor(Color.WHITE)
+                    reviewList[3] = true
+                }
+            }
+            imageView5.setOnClickListener {
+                if(reviewList[4]){
+                    it.setBackgroundColor(Color.LTGRAY)
+                    reviewList[4] = false
+                }
+                else{
+                    it.setBackgroundColor(Color.WHITE)
+                    reviewList[4] = true
+                }
+            }
+            imageView6.setOnClickListener {
+                if(reviewList[5]){
+                    it.setBackgroundColor(Color.LTGRAY)
+                    reviewList[5] = false
+                }
+                else{
+                    it.setBackgroundColor(Color.WHITE)
+                    reviewList[5] = true
+                }
+            }
+            imageView7.setOnClickListener {
+                if(reviewList[6]){
+                    it.setBackgroundColor(Color.LTGRAY)
+                    reviewList[6] = false
+                }
+                else{
+                    it.setBackgroundColor(Color.WHITE)
+                    reviewList[6] = true
+                }
+            }
+            imageView8.setOnClickListener {
+                if(reviewList[7]){
+                    it.setBackgroundColor(Color.LTGRAY)
+                    reviewList[7] = false
+                }
+                else{
+                    it.setBackgroundColor(Color.WHITE)
+                    reviewList[7] = true
+                }
+            }
+            imageView9.setOnClickListener {
+                if(reviewList[8]){
+                    it.setBackgroundColor(Color.LTGRAY)
+                    reviewList[8] = false
+                }
+                else{
+                    it.setBackgroundColor(Color.WHITE)
+                    reviewList[8] = true
+                }
+            }
+        }
+    }
+
     private fun init(){
         MapKitFactory.initialize(this)
         mapView = binding.mapview
@@ -202,12 +319,14 @@ class MainActivity : AppCompatActivity() {
                 getImageForResult.launch(intent)
             }
 
+            initImage()
             closeMenuPoint.setOnClickListener {
                 currentInterestPoint = null
                 SaveData.currentPointId = null
                 menuPoint.visibility = View.INVISIBLE
                 MapManager.updateFocusInfo(0)
                 messageSet.setText("")
+                deactivateImage()
             }
             sentMessage.setOnClickListener {
                 val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
@@ -403,6 +522,7 @@ class MainActivity : AppCompatActivity() {
                         CLUSTER_RADIUS,
                         CLUSTER_MIN_ZOOM
                     )
+                    if (false) {
 //                    val interestPoints = arrayListOf<InterestPoint>(
 //                        InterestPoint(
 //                            PlacemarkUserData(
@@ -3695,11 +3815,16 @@ class MainActivity : AppCompatActivity() {
 //                        interestPoint.data.id = ref.key.toString()
 //                        ref.setValue(interestPoint)
 //                    }
+                    }
                 }
             }
         }
         fun closeMenus(){
             mainActivity!!.binding.navView.selectedItemId = R.id.navigation_map
         }
+    }
+
+    fun onClickImageReview(view: View) {
+        (view.layoutParams as MarginLayoutParams).setMargins(0)
     }
 }
