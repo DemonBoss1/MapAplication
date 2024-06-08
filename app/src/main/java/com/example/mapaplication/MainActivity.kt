@@ -342,9 +342,11 @@ class MainActivity : AppCompatActivity() {
                             SaveData.currentPointId!!,
                             message,
                             SaveData.UserId,
-                            currentDate
+                            currentDate,
+                            reviewList
                         )
                         DataBase.getDataBase()!!.messageReference.push().setValue(mes)
+                        deactivateImage()
                     }
                     adapter.notifyDataSetChanged()
                 }

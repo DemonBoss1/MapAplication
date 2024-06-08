@@ -1,8 +1,10 @@
 package com.example.mapaplication.ui.map
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.children
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mapaplication.DataBase
 import com.example.mapaplication.R
@@ -15,18 +17,24 @@ import com.squareup.picasso.Picasso
 class MessageAdapter(private val messageList: ArrayList<Message>): RecyclerView.Adapter<MessageAdapter.MessageHolder>() {
     class MessageHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val binding = MessageLayoutBinding.bind(itemView)
-        fun bind(message: Message) = with(binding){
-                DataBase.getDataBase()!!
-                    .userReference
-                    .child(SaveData.UserId)
-                    .get().addOnCompleteListener {
-                        val user: User? = it.result.getValue<User>()
-                        if (user != null)
-                            Picasso.get().load(user.imageUri).into(userImageInMessage)
+        fun bind(message: Message) = with(binding) {
+            var user: User?
+            DataBase.getDataBase()!!
+                .userReference
+                .child(message.userId)
+                .get().addOnCompleteListener {
+                    user= it.result.getValue<User>()
+                    if (user != null) {
+                        Picasso.get().load(user!!.imageUri).into(userImageInMessage)
+                        username.text = user!!.username
                     }
-                username.text = SaveData.username
-                dateTime.text = message.date
-                messageGet.text = message.message
+                }
+            dateTime.text = message.date
+            messageGet.text = message.message
+            message.reviewList.forEachIndexed { index, b ->
+                if(b) imageViewLayout.getChildAt(index).visibility = View.VISIBLE
+                else imageViewLayout.getChildAt(index).visibility = View.GONE
+            }
         }
     }
 

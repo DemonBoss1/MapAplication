@@ -41,7 +41,7 @@
                 android:id="@+id/menu_point"
                 android:layout_width="match_parent"
                 android:layout_height="400dp"
-                android:visibility="visible"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
@@ -107,8 +107,8 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="30dp"
-                                android:orientation="horizontal"
-                                android:layout_margin="10dp">
+                                android:layout_margin="10dp"
+                                android:orientation="horizontal">
 
                                 <FrameLayout
                                     android:layout_width="0dp"
