@@ -41,7 +41,7 @@
                 android:id="@+id/menu_point"
                 android:layout_width="match_parent"
                 android:layout_height="400dp"
-                android:visibility="invisible"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
@@ -85,6 +85,16 @@
                                 android:text="x" />
                         </LinearLayout>
 
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/feedback_on_point_interest"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/title_menu_point_layout" >
+
+                        </androidx.recyclerview.widget.RecyclerView>
+
                         <TextView
                             android:id="@+id/description_menu_point"
                             android:layout_width="match_parent"
@@ -93,7 +103,7 @@
                             android:text="TextView"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/title_menu_point_layout" />
+                            app:layout_constraintTop_toBottomOf="@+id/feedback_on_point_interest" />
 
                         <LinearLayout
                             android:id="@+id/add_message_menu"

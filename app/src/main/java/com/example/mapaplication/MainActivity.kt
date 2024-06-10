@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.PointF
-import android.graphics.PorterDuff
 import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.util.Log
@@ -17,6 +16,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.core.view.setMargins
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mapaplication.databinding.ActivityMainBinding
 import com.example.mapaplication.ui.history.HistoryFragment
@@ -30,6 +30,8 @@ import com.example.mapaplication.ui.map.MessageAdapter
 import com.example.mapaplication.ui.map.PlacemarkType
 import com.example.mapaplication.ui.map.PlacemarkUserData
 import com.example.mapaplication.ui.map.PointForHistory
+import com.example.mapaplication.ui.map.ReviewAdapter
+import com.example.mapaplication.ui.map.ReviewItem
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -66,8 +68,22 @@ class MainActivity : AppCompatActivity() {
     private var filters: Filters? = null
 
     val reviewList = arrayListOf(false, false, false, false, false, false, false, false, false)
+    val reviewImages = arrayListOf(
+        R.drawable.camera,
+        R.drawable.videocamera,
+        R.drawable.religion,
+        R.drawable.grime,
+        R.drawable.more_money,
+        R.drawable.cheaply,
+        R.drawable.noise,
+        R.drawable.poor_service,
+        R.drawable.delicious,
+    )
+    val allReviewList = ArrayList<ReviewItem>()
+    val reviewAdapter = ReviewAdapter(allReviewList)
+
     val messageList = ArrayList<Message>()
-    val adapter = MessageAdapter(messageList)
+    val messageAdapter = MessageAdapter(messageList)
 
     var currentInterestPoint: InterestPoint? = null
 
@@ -127,7 +143,6 @@ class MainActivity : AppCompatActivity() {
         currentInterestPoint = InterestPoint(userData, point)
 
         binding.apply {
-            menuPoint.visibility = View.VISIBLE
             titleMenuPoint.text = userData.title
             descriptionMenuPoint.text = userData.description
         }
@@ -149,13 +164,26 @@ class MainActivity : AppCompatActivity() {
         DataBase.getDataBase()!!.messageReference.addValueEventListener(object :
             ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+                allReviewList.clear()
                 messageList.clear()
                 for (ds in snapshot.children) {
                     val message = ds.getValue<Message>()
-                    if (message != null && message.interestPointId == SaveData.currentPointId)
+                    if (message != null && message.interestPointId == SaveData.currentPointId) {
                         messageList.add(message)
+                        for(i in 0..<message.reviewList.size){
+                            if(message.reviewList[i]){
+                                for (j in 0..allReviewList.size)
+                                    if(j < allReviewList.size){
+                                        if(allReviewList[j].imageId == reviewImages[i])
+                                            allReviewList[j].count ++
+                                    } else allReviewList.add(ReviewItem(reviewImages[i], 1))
+                            }
+                        }
+                    }
                 }
-                adapter.notifyDataSetChanged()
+                reviewAdapter.notifyDataSetChanged()
+                messageAdapter.notifyDataSetChanged()
+                binding.menuPoint.visibility = View.VISIBLE
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -319,7 +347,11 @@ class MainActivity : AppCompatActivity() {
                 getImageForResult.launch(intent)
             }
 
+            for (i in 0..<reviewImages.size) allReviewList.add(ReviewItem(reviewImages[i], 0))
+            feedbackOnPointInterest.layoutManager = GridLayoutManager(this@MainActivity, 3)
+            feedbackOnPointInterest.adapter = reviewAdapter
             initImage()
+
             closeMenuPoint.setOnClickListener {
                 currentInterestPoint = null
                 SaveData.currentPointId = null
@@ -348,14 +380,14 @@ class MainActivity : AppCompatActivity() {
                         DataBase.getDataBase()!!.messageReference.push().setValue(mes)
                         deactivateImage()
                     }
-                    adapter.notifyDataSetChanged()
+                    messageAdapter.notifyDataSetChanged()
                 }
                 val historyItem = HistoryItem(PointForHistory(currentInterestPoint!!.point.latitude, currentInterestPoint!!.point.longitude), currentDate, currentInterestPoint!!.data.title, message)
                 SaveData.historyPoints.add(historyItem)
                 HistoryFragment.notifyDataSetChanged()
             }
             messages.layoutManager = LinearLayoutManager(this@MainActivity)
-            messages.adapter = adapter
+            messages.adapter = messageAdapter
 
             closeMenuFilter.setOnClickListener {
                 drawer.closeDrawer(GravityCompat.START)
