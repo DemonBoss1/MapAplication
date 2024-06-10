@@ -1,6 +1,5 @@
-package com.example.mapaplication.ui.history
+package com.mammoth_empire.the_secret_of_cities.ui.history
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mapaplication.databinding.FragmentHistoryBinding
-import com.example.mapaplication.ui.map.InterestPoint
+import com.mammoth_empire.the_secret_of_cities.ui.map.InterestPoint
 
 class HistoryFragment : Fragment() {
 

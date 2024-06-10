@@ -1,7 +1,5 @@
-package com.example.mapaplication.ui.map
+package com.mammoth_empire.the_secret_of_cities.ui.map
 
-import android.os.Parcel
-import android.os.Parcelable
 import com.yandex.mapkit.geometry.Point
 import kotlinx.serialization.Serializable
 

@@ -1,6 +1,5 @@
-package com.example.mapaplication.ui.map
+package com.mammoth_empire.the_secret_of_cities.ui.map
 
-import com.yandex.mapkit.geometry.Point
 import kotlinx.serialization.Serializable
 
 @Serializable

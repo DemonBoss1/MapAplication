@@ -1,8 +1,7 @@
-package com.example.mapaplication
+package com.mammoth_empire.the_secret_of_cities
 
 import android.content.SharedPreferences
-import com.example.mapaplication.ui.map.HistoryItem
-import com.example.mapaplication.ui.map.InterestPoint
+import com.mammoth_empire.the_secret_of_cities.ui.map.HistoryItem
 
 class SaveData private constructor(pref: SharedPreferences) {
     companion object{

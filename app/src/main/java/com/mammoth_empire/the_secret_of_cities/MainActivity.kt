@@ -1,15 +1,13 @@
-package com.example.mapaplication
+package com.mammoth_empire.the_secret_of_cities
 
 import android.Manifest.permission
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.PointF
 import android.icu.text.SimpleDateFormat
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -23,20 +21,21 @@ import androidx.core.view.GravityCompat
 import androidx.core.view.setMargins
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.mapaplication.R
 import com.example.mapaplication.databinding.ActivityMainBinding
-import com.example.mapaplication.ui.history.HistoryFragment
-import com.example.mapaplication.ui.map.ClusterView
-import com.example.mapaplication.ui.map.Filters
-import com.example.mapaplication.ui.map.HistoryItem
-import com.example.mapaplication.ui.map.InterestPoint
-import com.example.mapaplication.ui.map.MapManager
-import com.example.mapaplication.ui.map.Message
-import com.example.mapaplication.ui.map.MessageAdapter
-import com.example.mapaplication.ui.map.PlacemarkType
-import com.example.mapaplication.ui.map.PlacemarkUserData
-import com.example.mapaplication.ui.map.PointForHistory
-import com.example.mapaplication.ui.map.ReviewAdapter
-import com.example.mapaplication.ui.map.ReviewItem
+import com.mammoth_empire.the_secret_of_cities.ui.history.HistoryFragment
+import com.mammoth_empire.the_secret_of_cities.ui.map.ClusterView
+import com.mammoth_empire.the_secret_of_cities.ui.map.Filters
+import com.mammoth_empire.the_secret_of_cities.ui.map.HistoryItem
+import com.mammoth_empire.the_secret_of_cities.ui.map.InterestPoint
+import com.mammoth_empire.the_secret_of_cities.ui.map.MapManager
+import com.mammoth_empire.the_secret_of_cities.ui.map.Message
+import com.mammoth_empire.the_secret_of_cities.ui.map.MessageAdapter
+import com.mammoth_empire.the_secret_of_cities.ui.map.PlacemarkType
+import com.mammoth_empire.the_secret_of_cities.ui.map.PlacemarkUserData
+import com.mammoth_empire.the_secret_of_cities.ui.map.PointForHistory
+import com.mammoth_empire.the_secret_of_cities.ui.map.ReviewAdapter
+import com.mammoth_empire.the_secret_of_cities.ui.map.ReviewItem
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -45,7 +44,6 @@ import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKit
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.geometry.Point
-import com.yandex.mapkit.layers.ObjectEvent
 import com.yandex.mapkit.map.CameraPosition
 import com.yandex.mapkit.map.ClusterListener
 import com.yandex.mapkit.map.ClusterTapListener
@@ -56,8 +54,6 @@ import com.yandex.mapkit.map.MapObjectDragListener
 import com.yandex.mapkit.map.MapObjectTapListener
 import com.yandex.mapkit.mapview.MapView
 import com.yandex.mapkit.user_location.UserLocationLayer
-import com.yandex.mapkit.user_location.UserLocationObjectListener
-import com.yandex.mapkit.user_location.UserLocationView
 import com.yandex.runtime.image.ImageProvider
 import com.yandex.runtime.ui_view.ViewProvider
 import kotlinx.serialization.encodeToString
@@ -466,7 +462,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun recordingUserName(){
-        SaveData.get(getSharedPreferences("setting", Context.MODE_PRIVATE))
+        SaveData.get(getSharedPreferences("setting", MODE_PRIVATE))
         if(SaveData.pref.contains("username")){
             SaveData.username = SaveData.pref.getString("username", "").toString()
             SaveData.UserId = SaveData.pref.getString("ID", "").toString()

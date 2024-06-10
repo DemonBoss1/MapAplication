@@ -1,10 +1,10 @@
-package com.example.mapaplication
+package com.mammoth_empire.the_secret_of_cities
 
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
-import com.example.mapaplication.ui.map.InterestPoint
+import com.mammoth_empire.the_secret_of_cities.ui.map.InterestPoint
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference

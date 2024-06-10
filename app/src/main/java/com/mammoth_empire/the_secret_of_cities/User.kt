@@ -1,7 +1,4 @@
-package com.example.mapaplication
-
-import android.net.Uri
-import com.yandex.mapkit.geometry.Point
+package com.mammoth_empire.the_secret_of_cities
 
 class User() {
     lateinit var id: String

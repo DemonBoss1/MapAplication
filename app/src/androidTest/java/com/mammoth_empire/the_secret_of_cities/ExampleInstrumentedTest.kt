@@ -1,4 +1,4 @@
-package com.example.mapaplication
+package com.mammoth_empire.the_secret_of_cities
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

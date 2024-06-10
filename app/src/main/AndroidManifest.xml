@@ -17,7 +17,7 @@
         android:theme="@style/Theme.MapAplication"
         tools:targetApi="31" >
         <activity
-            android:name=".MainActivity"
+            android:name="com.mammoth_empire.the_secret_of_cities.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:screenOrientation="portrait">

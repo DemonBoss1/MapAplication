@@ -1,15 +1,11 @@
-package com.example.mapaplication.ui.map
+package com.mammoth_empire.the_secret_of_cities.ui.map
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mapaplication.DataBase
 import com.example.mapaplication.R
-import com.example.mapaplication.User
 import com.example.mapaplication.databinding.ReviewItemBinding
-import com.google.firebase.database.getValue
-import com.squareup.picasso.Picasso
 
 class ReviewAdapter(private val reviewList: ArrayList<ReviewItem>): RecyclerView.Adapter<ReviewAdapter.ReviewHolder>() {
     class ReviewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {

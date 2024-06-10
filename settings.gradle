@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "MapAplication"
+rootProject.name = "The secret of cities"
 include ':app'

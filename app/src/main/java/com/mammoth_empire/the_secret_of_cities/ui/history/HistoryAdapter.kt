@@ -1,25 +1,17 @@
-package com.example.mapaplication.ui.history
+package com.mammoth_empire.the_secret_of_cities.ui.history
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mapaplication.DataBase
-import com.example.mapaplication.MainActivity
+import com.mammoth_empire.the_secret_of_cities.MainActivity
 import com.example.mapaplication.R
-import com.example.mapaplication.SaveData
-import com.example.mapaplication.User
+import com.mammoth_empire.the_secret_of_cities.SaveData
 import com.example.mapaplication.databinding.HistoryItemBinding
-import com.example.mapaplication.databinding.MessageLayoutBinding
-import com.example.mapaplication.ui.map.HistoryItem
-import com.example.mapaplication.ui.map.InterestPoint
-import com.example.mapaplication.ui.map.MapManager
-import com.example.mapaplication.ui.map.Message
-import com.google.firebase.database.getValue
-import com.squareup.picasso.Picasso
+import com.mammoth_empire.the_secret_of_cities.ui.map.HistoryItem
+import com.mammoth_empire.the_secret_of_cities.ui.map.InterestPoint
+import com.mammoth_empire.the_secret_of_cities.ui.map.MapManager
 import com.yandex.mapkit.geometry.Point
-import com.yandex.mapkit.map.CameraPosition
 
 class HistoryAdapter(historyList: ArrayList<InterestPoint>): RecyclerView.Adapter<HistoryAdapter.HistoryHolder>()  {
     private val historyList = SaveData.historyPoints

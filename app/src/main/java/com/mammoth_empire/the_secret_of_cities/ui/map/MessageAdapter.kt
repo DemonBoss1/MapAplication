@@ -1,15 +1,12 @@
-package com.example.mapaplication.ui.map
+package com.mammoth_empire.the_secret_of_cities.ui.map
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.children
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mapaplication.DataBase
+import com.mammoth_empire.the_secret_of_cities.DataBase
 import com.example.mapaplication.R
-import com.example.mapaplication.SaveData
-import com.example.mapaplication.User
+import com.mammoth_empire.the_secret_of_cities.User
 import com.example.mapaplication.databinding.MessageLayoutBinding
 import com.google.firebase.database.getValue
 import com.squareup.picasso.Picasso

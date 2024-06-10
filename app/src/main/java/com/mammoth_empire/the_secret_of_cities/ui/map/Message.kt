@@ -1,7 +1,6 @@
-package com.example.mapaplication.ui.map
+package com.mammoth_empire.the_secret_of_cities.ui.map
 
 import java.util.ArrayList
-import java.util.Date
 
 class Message() {
 

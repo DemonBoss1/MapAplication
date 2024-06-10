@@ -41,7 +41,7 @@
                 android:id="@+id/menu_point"
                 android:layout_width="match_parent"
                 android:layout_height="400dp"
-                android:visibility="visible"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
@@ -91,7 +91,7 @@
                             android:layout_height="wrap_content"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/title_menu_point_layout" >
+                            app:layout_constraintTop_toBottomOf="@id/title_menu_point_layout">
 
                         </androidx.recyclerview.widget.RecyclerView>
 
@@ -421,7 +421,7 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragmentContainerView"
-            android:name="com.example.mapaplication.ui.history.HistoryFragment"
+            android:name="com.mammoth_empire.the_secret_of_cities.ui.history.HistoryFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"
