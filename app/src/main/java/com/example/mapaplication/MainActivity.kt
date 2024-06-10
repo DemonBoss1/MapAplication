@@ -1,11 +1,15 @@
 package com.example.mapaplication
 
+import android.Manifest.permission
+
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.PointF
 import android.icu.text.SimpleDateFormat
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -14,6 +18,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import androidx.core.view.setMargins
 import androidx.recyclerview.widget.GridLayoutManager
@@ -37,8 +42,10 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.getValue
 import com.yandex.mapkit.Animation
+import com.yandex.mapkit.MapKit
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.geometry.Point
+import com.yandex.mapkit.layers.ObjectEvent
 import com.yandex.mapkit.map.CameraPosition
 import com.yandex.mapkit.map.ClusterListener
 import com.yandex.mapkit.map.ClusterTapListener
@@ -48,6 +55,9 @@ import com.yandex.mapkit.map.MapObject
 import com.yandex.mapkit.map.MapObjectDragListener
 import com.yandex.mapkit.map.MapObjectTapListener
 import com.yandex.mapkit.mapview.MapView
+import com.yandex.mapkit.user_location.UserLocationLayer
+import com.yandex.mapkit.user_location.UserLocationObjectListener
+import com.yandex.mapkit.user_location.UserLocationView
 import com.yandex.runtime.image.ImageProvider
 import com.yandex.runtime.ui_view.ViewProvider
 import kotlinx.serialization.encodeToString
@@ -61,6 +71,9 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private val dataBase = DataBase.getDataBase()
+
+    private lateinit var mapKit: MapKit
+    private lateinit var locationOnMapKit: UserLocationLayer
 
     private lateinit var mapView: MapView
     private lateinit var mapManager: MapManager
@@ -205,7 +218,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity = this
+
         MapKitFactory.setApiKey("8e68e3bf-421b-4ae6-ac02-7d71e41c9c36")
+        MapKitFactory.initialize(this)
+        mapKit = MapKitFactory.getInstance()
+        requestLocationPermission()
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -220,7 +237,14 @@ class MainActivity : AppCompatActivity() {
 
         init()
 
-        //assets.open("Point.json")
+        locationOnMapKit = mapKit.createUserLocationLayer(mapView.mapWindow)
+        locationOnMapKit.isVisible = true
+    }
+
+    private fun requestLocationPermission(){
+        if(ActivityCompat.checkSelfPermission(this, permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(this, permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(this, arrayOf(permission.ACCESS_FINE_LOCATION, permission.ACCESS_COARSE_LOCATION), 100)
     }
 
     fun deactivateImage(){
@@ -492,7 +516,6 @@ class MainActivity : AppCompatActivity() {
 
         super.onStop()
     }
-
     override fun onDestroy() {
         super.onDestroy()
     }
