@@ -73,7 +73,6 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:gravity="center"
-                                android:text="TextView"
                                 android:textSize="20sp" />
 
                             <Button
@@ -100,7 +99,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="10dp"
-                            android:text="TextView"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/feedback_on_point_interest" />
@@ -280,7 +278,7 @@
                                     android:layout_weight="1"
                                     android:ems="10"
                                     android:gravity="bottom"
-                                    android:hint="Message"
+                                    android:hint="@string/message"
                                     android:inputType="textMultiLine|textCapWords" />
 
                                 <Button
@@ -289,7 +287,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="bottom"
                                     android:layout_weight="0"
-                                    android:text="Sent" />
+                                    android:text=">"/>
                             </LinearLayout>
                         </LinearLayout>
 
@@ -309,7 +307,7 @@
 
         <ScrollView
             android:id="@+id/filterMenu"
-            android:layout_width="150dp"
+            android:layout_width="180dp"
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:background="@color/white"
@@ -397,25 +395,28 @@
 
                 <Button
                     android:id="@+id/filter_select_all"
-                    android:layout_width="100dp"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="50dp"
-                    android:text="Select all" />
+                    android:text="@string/select_all"
+                    android:textSize="12sp"/>
 
                 <Button
                     android:id="@+id/filter_reset"
-                    android:layout_width="100dp"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="Reset" />
+                    android:text="@string/reset"
+                    android:textSize="12sp"/>
 
                 <Button
                     android:id="@+id/filter_apply"
-                    android:layout_width="100dp"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="Apply" />
+                    android:text="@string/apply"
+                    android:textSize="12sp"/>
             </LinearLayout>
         </ScrollView>
 
@@ -460,7 +461,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:hint="Name"
+                android:hint="@string/name"
                 android:inputType="text" />
 
             <Button
@@ -468,7 +469,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="editName"
-                android:text="Edit" />
+                android:text="@string/edit" />
         </LinearLayout>
     </LinearLayout>
 
